@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#120018" />
+<title>Marvalous Free Play Hub</title>
+<link rel="apple-touch-icon" href="logo.png">
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="manifest" href="manifest.json">
+
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+window.OneSignalDeferred = window.OneSignalDeferred || [];
+OneSignalDeferred.push(async function(OneSignal) {
+  await OneSignal.init({
+    appId: "53bd206e-20f6-417e-8d73-ce10ee3b1b3a",
+    notifyButton: { enable: true },
+    promptOptions: { slidedown: { enabled: true, autoPrompt: true } }
+  });
+});
+</script>
+
+<style>
+:root{--purple:#7b2cff;--pink:#ff2fd6;--gold:#ffd76a;--dark:#050006;--white:#fff}
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;font-family:Arial,Helvetica,sans-serif;color:white;text-align:center;
+  background:
+    radial-gradient(circle at 50% -10%, rgba(255,215,106,.20), transparent 28%),
+    radial-gradient(circle at top left, rgba(123,44,255,.40), transparent 36%),
+    radial-gradient(circle at bottom right, rgba(255,47,214,.25), transparent 38%),
+    linear-gradient(180deg,#21002e 0%,#09000d 58%,#000 100%);
+  overflow-x:hidden;
+}
+.sparkle{
+  position:fixed;inset:0;pointer-events:none;opacity:.35;
+  background-image:
+    radial-gradient(circle, rgba(255,215,106,.85) 0 1px, transparent 2px),
+    radial-gradient(circle, rgba(255,255,255,.55) 0 1px, transparent 2px);
+  background-size:55px 55px,87px 87px;background-position:0 0,22px 28px;
+}
+.app{width:min(430px,100%);margin:0 auto;min-height:100vh;padding:28px 18px 34px;position:relative}
+.card{
+  margin-top:18px;padding:24px 18px;border-radius:32px;
+  background:linear-gradient(180deg,rgba(255,215,106,.10),rgba(255,255,255,.03)),rgba(8,0,11,.82);
+  border:1px solid rgba(255,215,106,.35);
+  box-shadow:0 0 38px rgba(255,215,106,.14),0 0 28px rgba(123,44,255,.38),inset 0 0 24px rgba(255,255,255,.05);
+  backdrop-filter:blur(10px);
+}
+.logo{width:150px;max-width:65%;margin:6px auto 18px;display:block}
+.brand{color:var(--gold);font-size:17px;font-weight:1000;letter-spacing:2.4px;text-transform:uppercase;text-shadow:0 0 13px rgba(255,215,106,.7);margin-bottom:10px}
+h1{margin:0;font-size:36px;line-height:.92;text-transform:uppercase;text-shadow:0 0 18px rgba(255,47,214,.65)}
+.sub{max-width:320px;margin:14px auto 22px;color:rgba(255,255,255,.78);line-height:1.35;font-size:15px}
+.btn{
+  display:block;width:100%;text-decoration:none;border-radius:20px;padding:18px 16px;margin:13px 0;
+  font-size:19px;font-weight:1000;color:#160018;
+  background:linear-gradient(135deg,#fff3a6 0%,#ffd76a 38%,#b97818 100%);
+  box-shadow:0 0 22px rgba(255,215,106,.38);border:0;
+}
+.btn.purple{color:white;background:linear-gradient(135deg,#a444ff,#6815d6);box-shadow:0 0 22px rgba(123,44,255,.55);border:1px solid rgba(255,255,255,.16)}
+.mini{margin-top:18px;color:rgba(255,255,255,.58);font-size:12px;line-height:1.4}
+.install{margin-top:22px;padding:16px;border-radius:24px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06)}
+.install p{margin:6px 0;color:rgba(255,255,255,.72);font-size:14px}
+.android-install{background:#7b2cff;color:white;padding:14px 18px;border-radius:14px;font-size:16px;font-weight:900;border:none;margin-top:12px;box-shadow:0 0 18px rgba(123,44,255,.55)}
+</style>
+</head>
+
+<body>
+<div class="sparkle"></div>
+<main class="app">
+  <section class="card">
+    <img src="logo.png" class="logo" onerror="this.style.display='none'">
+    <div class="brand">Marvalous Competitions</div>
+    <h1>Free Play<br>Hub</h1>
+    <p class="sub">Daily VIP scratch cards, free play drops and quick access to Marvalous competitions.</p>
+    <a class="btn" href="scratch.html">🎰 Daily VIP Scratch</a>
+    <a class="btn purple" href="https://marvalouscompetitions.co.uk">🏆 Open Competitions</a>
+
+    <div class="install">
+      <p><b>iPhone Users</b></p>
+      <p>Tap Share or the 3 dots menu, then Add to Home Screen.</p>
+    </div>
+
+    <div class="mini">Daily code is dropped inside Marvalous Elite Club. One play per device per daily code.</div>
+  </section>
+</main>
+
+<script>
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const installBtn = document.createElement("button");
+  installBtn.innerText = "Android users - Tap Here to Install";
+  installBtn.className = "android-install";
+  document.querySelector(".install").appendChild(installBtn);
+  installBtn.addEventListener("click", () => {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
+  });
+});
+</script>
+
+<script>
+window.OneSignalDeferred = window.OneSignalDeferred || [];
+OneSignalDeferred.push(function(OneSignal) {
+  setTimeout(function(){ OneSignal.showSlidedownPrompt(); }, 3000);
+});
+</script>
+</body>
+</html>

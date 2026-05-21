@@ -58,17 +58,60 @@ canvas{position:absolute;inset:14px;width:calc(100% - 28px);height:calc(100% - 2
 </section>
 <div class="footer">One play per device per daily code. Screenshot wins to claim.</div>
 </main>
+<form name="scratch-claim" netlify hidden>
+  <input type="text" name="name">
+  <input type="email" name="email">
+  <input type="text" name="prize">
+  <input type="text" name="dailyCode">
+  <input type="text" name="minSpend">
+  <input type="text" name="expiry">
+</form>
 <div class="modal" id="modal"><div class="box"><h2 id="modalTitle">Result</h2><div class="result" id="resultText"></div><p class="small" id="resultSmall"></p><button onclick="closeModal()">Done</button></div></div>
 <script>
 const SETTINGS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSlaiXI-x0C_wLvxmELI21rTu9uFR87MYtx9gqV_z_Z3hZ5nOCQBnb9No6i9MtZyqBD3c9wTo1tmz6x/pub?output=csv";
+const CLAIM_WEBHOOK = "TEMP";
 let DAILY_CODE = "MARVDAILY";
-let WIN_CHANCE = 0.01;
-let PRIZE_TEXT = "£5 Site Credit";
+let PRIZES = [];
 const ALL_SYMBOLS = ["💷","💎","🎁","🔥","⚡","👑","🍀","⭐","💜"];
 const gameArea=document.getElementById("gameArea"),symbolsBox=document.getElementById("symbols"),statusBox=document.getElementById("status"),canvas=document.getElementById("scratchCanvas"),ctx=canvas.getContext("2d"),modal=document.getElementById("modal"),modalTitle=document.getElementById("modalTitle"),resultText=document.getElementById("resultText"),resultSmall=document.getElementById("resultSmall"),banner=document.getElementById("banner");
-let playKey="",generatedSymbols=[],isDrawing=false,revealed=false;
+let playKey="",generatedSymbols=[],isDrawing=false,revealed=false,currentPrize=null;
 function csvSplit(row){return row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g).map(v=>v.replace(/^"|"$/g,"").trim())}
 async function loadSettings(){
+ try{
+  const res = await fetch(SETTINGS_CSV_URL + "&t=" + Date.now(), {cache:"no-store"});
+  const text = await res.text();
+  const lines = text.trim().split(/\r?\n/);
+
+  DAILY_CODE = csvSplit(lines[0])[1].trim().toUpperCase();
+
+  PRIZES = [];
+
+  for(let i=4; i<lines.length; i++){
+    if(!lines[i].trim()) continue;
+
+    const row = csvSplit(lines[i]);
+
+    PRIZES.push({
+      prize: row[0],
+      chance: parseFloat(row[1]),
+      claimType: row[2],
+      minSpend: row[3],
+      expiry: row[4]
+    });
+  }
+
+  playKey = `marvalous_daily_scratch_played_${DAILY_CODE}`;
+
+  statusBox.textContent = localStorage.getItem(playKey)
+    ? "You’ve already used today’s VIP scratch card on this device."
+    : "Today’s settings loaded.";
+
+ } catch(e){
+   statusBox.textContent = "Settings could not load. Try again shortly.";
+ }
+}
+
+ 
  try{
   const res=await fetch(SETTINGS_CSV_URL+"&t="+Date.now(),{cache:"no-store"});
   const text=await res.text();
@@ -86,7 +129,30 @@ async function loadSettings(){
  }catch(e){statusBox.textContent="Settings could not load. Try again shortly.";}
 }
 function shuffle(arr){return arr.sort(()=>Math.random()-.5)}
+function pickPrize(){
+  let roll = Math.random() * 100;
+  let total = 0;
+
+  for(const item of PRIZES){
+    total += Number(item.chance || 0);
+    if(roll <= total) return item;
+  }
+
+  return { prize:"TRY AGAIN", chance:0, claimType:"none", minSpend:"", expiry:"" };
+}
+
 function makeResult(){
+  currentPrize = pickPrize();
+
+  if(currentPrize.prize.toUpperCase() !== "TRY AGAIN"){
+    const s = ALL_SYMBOLS[Math.floor(Math.random() * ALL_SYMBOLS.length)];
+    let p = [s, s, s];
+    while(p.length < 9) p.push(ALL_SYMBOLS[Math.floor(Math.random() * ALL_SYMBOLS.length)]);
+    return shuffle(p);
+  }
+
+  return shuffle([ALL_SYMBOLS[0],ALL_SYMBOLS[0],ALL_SYMBOLS[1],ALL_SYMBOLS[1],ALL_SYMBOLS[2],ALL_SYMBOLS[2],ALL_SYMBOLS[3],ALL_SYMBOLS[4],ALL_SYMBOLS[5]]);
+}
  const win=Math.random()<WIN_CHANCE;
  if(win){const s=ALL_SYMBOLS[Math.floor(Math.random()*ALL_SYMBOLS.length)];let p=[s,s,s];while(p.length<9)p.push(ALL_SYMBOLS[Math.floor(Math.random()*ALL_SYMBOLS.length)]);return shuffle(p)}
  return shuffle([ALL_SYMBOLS[0],ALL_SYMBOLS[0],ALL_SYMBOLS[1],ALL_SYMBOLS[1],ALL_SYMBOLS[2],ALL_SYMBOLS[2],ALL_SYMBOLS[3],ALL_SYMBOLS[4],ALL_SYMBOLS[5]])
@@ -99,7 +165,60 @@ function getPos(e){const r=canvas.getBoundingClientRect(),t=e.touches?e.touches[
 function scratch(e){if(gameArea.classList.contains("locked")||revealed)return;e.preventDefault();const p=getPos(e);ctx.globalCompositeOperation="destination-out";ctx.beginPath();ctx.arc(p.x,p.y,23,0,Math.PI*2);ctx.fill();checkScratchAmount()}
 function checkScratchAmount(){const img=ctx.getImageData(0,0,canvas.width,canvas.height);let clear=0;for(let i=3;i<img.data.length;i+=4)if(img.data[i]<80)clear++;if(clear/(img.data.length/4)>.45){revealed=true;ctx.clearRect(0,0,canvas.width,canvas.height);localStorage.setItem(playKey,"yes");setTimeout(showResult,500)}}
 function unlockGame(){const entered=document.getElementById("codeInput").value.trim().toUpperCase();if(entered!==DAILY_CODE){statusBox.textContent="Wrong code. Check the Elite Club daily post.";return}if(localStorage.getItem(playKey)){statusBox.textContent="You’ve already used today’s VIP scratch card on this device.";gameArea.classList.add("locked");return}revealed=false;statusBox.textContent="Unlocked. Scratch your VIP card.";gameArea.classList.remove("locked");renderSymbols();setTimeout(sizeCanvas,50)}
-function showResult(){const won=hasThreeMatch(generatedSymbols);if(won){modalTitle.textContent="Winner!";resultText.textContent=PRIZE_TEXT;resultSmall.textContent="Screenshot this screen and message the page to claim.";confettiBurst()}else{modalTitle.textContent="Unlucky!";resultText.textContent="Try Again Tomorrow";resultSmall.textContent="No match this time. Come back tomorrow for another free play."}modal.classList.add("show");gameArea.classList.add("locked");statusBox.textContent="You’ve used today’s VIP scratch card on this device."}
+function showResult(){const won = currentPrize && currentPrize.prize.toUpperCase() !== "TRY AGAIN";
+
+  if(won){
+    modalTitle.textContent = "Winner!";
+    resultText.textContent = currentPrize.prize;
+
+    resultSmall.innerHTML = `
+      Enter your details to claim.<br><br>
+      ${currentPrize.minSpend && currentPrize.minSpend != "0" ? `Minimum spend £${currentPrize.minSpend}<br>` : ""}
+      ${currentPrize.expiry && currentPrize.expiry !== "none" ? `Valid until ${currentPrize.expiry}<br><br>` : ""}
+      <input id="claimName" placeholder="Your name" style="width:100%;padding:12px;margin-bottom:10px;border-radius:12px;border:none;">
+      <input id="claimEmail" type="email" placeholder="Your email" style="width:100%;padding:12px;margin-bottom:10px;border-radius:12px;border:none;">
+      <button onclick="submitClaim()">Claim Prize</button>
+    `;
+  } else {
+    modalTitle.textContent = "Unlucky!";
+    resultText.textContent = "Try Again Tomorrow";
+    resultSmall.textContent = "No luck this time. Come back tomorrow for another free play.";
+  }
+
+  modal.classList.add("show");
+  gameArea.classList.add("locked");
+  statusBox.textContent = "You’ve used today’s VIP scratch card on this device.";
+}
+function submitClaim(){
+  const name = document.getElementById("claimName").value.trim();
+  const email = document.getElementById("claimEmail").value.trim();
+
+  if(!name || !email){
+    alert("Please enter your name and email.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("form-name", "scratch-claim");
+  formData.append("name", name);
+  formData.append("email", email);
+  formData.append("prize", currentPrize.prize);
+  formData.append("dailyCode", DAILY_CODE);
+  formData.append("minSpend", currentPrize.minSpend || "");
+  formData.append("expiry", currentPrize.expiry || "");
+
+  fetch("/", {
+    method: "POST",
+    body: formData
+  }).then(() => {
+    modalTitle.textContent = "Claim Sent!";
+    resultText.textContent = "Check your email soon";
+    resultSmall.textContent = "Your claim has been sent to the Marvalous team.";
+  }).catch(() => {
+    alert("Something went wrong sending your claim.");
+  });
+} 
+ 
 function closeModal(){modal.classList.remove("show")}
 function confettiBurst(){for(let i=0;i<32;i++){const p=document.createElement("div");p.textContent=["💜","🎉","✨","⭐","💷","👑"][Math.floor(Math.random()*6)];p.style.position="fixed";p.style.left=Math.random()*100+"vw";p.style.top="-25px";p.style.fontSize=(18+Math.random()*17)+"px";p.style.zIndex="120";p.style.transition="transform 1.8s ease, opacity 1.8s ease";document.body.appendChild(p);setTimeout(()=>{p.style.transform=`translateY(${80+Math.random()*40}vh) rotate(${Math.random()*360}deg)`;p.style.opacity="0"},20);setTimeout(()=>p.remove(),1900)}}
 canvas.addEventListener("mousedown",e=>{isDrawing=true;scratch(e)});canvas.addEventListener("mousemove",e=>{if(isDrawing)scratch(e)});window.addEventListener("mouseup",()=>isDrawing=false);

@@ -184,26 +184,27 @@ function submitClaim(){
     alert("Please enter your name and email.");
     return;
   }
-
-  const formData = new FormData();
-  formData.append("form-name", "scratch-claim");
-  formData.append("name", name);
-  formData.append("email", email);
-  formData.append("prize", currentPrize.prize);
-  formData.append("dailyCode", DAILY_CODE);
-  formData.append("minSpend", currentPrize.minSpend || "");
-  formData.append("expiry", currentPrize.expiry || "");
-
-  fetch("/", {
-    method: "POST",
-    body: formData
-  }).then(() => {
-    modalTitle.textContent = "Claim Sent!";
-    resultText.textContent = "Claim Sent!";
-    resultSmall.textContent = "The Marvalous team will check your claim and email your prize code if valid 💜";
-  }).catch(() => {
-    alert("Something went wrong sending your claim.");
-  });
+fetch("https://formspree.io/f/xeedgnzy", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "Accept": "application/json"
+  },
+  body: JSON.stringify({
+    name: name,
+    email: email,
+    prize: currentPrize.prize,
+    dailyCode: DAILY_CODE,
+    minSpend: currentPrize.minSpend || "",
+    expiry: currentPrize.expiry || ""
+  })
+}).then(() => {
+  modalTitle.textContent = "Claim Sent!";
+  resultText.textContent = "Claim Sent!";
+  resultSmall.textContent = "The Marvalous team will check your claim and email your prize code if valid 💜";
+}).catch(() => {
+  alert("Something went wrong sending your claim.");
+});
 } 
  
 function closeModal(){modal.classList.remove("show")}

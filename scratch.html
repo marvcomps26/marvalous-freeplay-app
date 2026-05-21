@@ -58,7 +58,7 @@ canvas{position:absolute;inset:14px;width:calc(100% - 28px);height:calc(100% - 2
 </section>
 <div class="footer">One play per device per daily code. Screenshot wins to claim.</div>
 </main>
-<form name="scratch-claim" netlify hidden>
+<form name="scratch-claim" method="POST" data-netlify="true" hidden>
   <input type="text" name="name">
   <input type="email" name="email">
   <input type="text" name="prize">
@@ -69,7 +69,6 @@ canvas{position:absolute;inset:14px;width:calc(100% - 28px);height:calc(100% - 2
 <div class="modal" id="modal"><div class="box"><h2 id="modalTitle">Result</h2><div class="result" id="resultText"></div><p class="small" id="resultSmall"></p><button id="doneBtn" onclick="closeModal()">Done</button></div></div>
 <script>
 const SETTINGS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSlaiXI-x0C_wLvxmELI21rTu9uFR87MYtx9gqV_z_Z3hZ5nOCQBnb9No6i9MtZyqBD3c9wTo1tmz6x/pub?output=csv";
-const CLAIM_WEBHOOK = "TEMP";
 let DAILY_CODE = "MARVDAILY";
 let PRIZES = [];
 const ALL_SYMBOLS = ["💷","💎","🎁","🔥","⚡","👑","🍀","⭐","💜"];

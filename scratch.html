@@ -66,7 +66,7 @@ canvas{position:absolute;inset:14px;width:calc(100% - 28px);height:calc(100% - 2
   <input type="text" name="minSpend">
   <input type="text" name="expiry">
 </form>
-<div class="modal" id="modal"><div class="box"><h2 id="modalTitle">Result</h2><div class="result" id="resultText"></div><p class="small" id="resultSmall"></p><button onclick="closeModal()">Done</button></div></div>
+<div class="modal" id="modal"><div class="box"><h2 id="modalTitle">Result</h2><div class="result" id="resultText"></div><p class="small" id="resultSmall"></p><button id="doneBtn" onclick="closeModal()">Done</button></div></div>
 <script>
 const SETTINGS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSlaiXI-x0C_wLvxmELI21rTu9uFR87MYtx9gqV_z_Z3hZ5nOCQBnb9No6i9MtZyqBD3c9wTo1tmz6x/pub?output=csv";
 const CLAIM_WEBHOOK = "TEMP";
@@ -164,7 +164,11 @@ function showResult(){const won = currentPrize && currentPrize.prize.toUpperCase
     resultText.textContent = "Try Again Tomorrow";
     resultSmall.textContent = "No luck this time. Come back tomorrow for another free play.";
   }
-
+if(won){
+  document.getElementById("doneBtn").style.display = "none";
+} else {
+  document.getElementById("doneBtn").style.display = "inline-block";
+      }
   modal.classList.add("show");
   gameArea.classList.add("locked");
   statusBox.textContent = "You’ve used today’s VIP scratch card on this device.";
@@ -192,8 +196,8 @@ function submitClaim(){
     body: formData
   }).then(() => {
     modalTitle.textContent = "Claim Sent!";
-    resultText.textContent = "Check your email soon";
-    resultSmall.textContent = "Your claim has been sent to the Marvalous team.";
+    resultText.textContent = "Claim Sent!";
+    resultSmall.textContent = "The Marvalous team will check your claim and email your prize code if valid 💜";
   }).catch(() => {
     alert("Something went wrong sending your claim.");
   });

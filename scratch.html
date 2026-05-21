@@ -200,7 +200,7 @@ fetch("https://formspree.io/f/xeedgnzy", {
   })
 }).then(() => {
   modalTitle.textContent = "Claim Sent!";
-  resultText.textContent = "Claim Sent!";
+  resultText.textContent = "";
   resultSmall.textContent = "The Marvalous team will check your claim and email your prize code if valid 💜";
 }).catch(() => {
   alert("Something went wrong sending your claim.");

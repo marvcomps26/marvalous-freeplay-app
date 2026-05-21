@@ -111,23 +111,6 @@ async function loadSettings(){
  }
 }
 
- 
- try{
-  const res=await fetch(SETTINGS_CSV_URL+"&t="+Date.now(),{cache:"no-store"});
-  const text=await res.text();
-  const lines=text.trim().split(/\r?\n/);
-  const headers=csvSplit(lines[0]);
-  const values=csvSplit(lines[1]);
-  const data={};
-  headers.forEach((h,i)=>data[h]=values[i]);
-  DAILY_CODE=(data.dailyCode||DAILY_CODE).trim().toUpperCase();
-  WIN_CHANCE=parseFloat(data.winChance||WIN_CHANCE);
-  PRIZE_TEXT=(data.prize||PRIZE_TEXT).trim();
-  playKey=`marvalous_daily_scratch_played_${DAILY_CODE}`;
-  banner.textContent=`Match 3 = ${PRIZE_TEXT}`;
-  statusBox.textContent=localStorage.getItem(playKey)?"You’ve already used today’s VIP scratch card on this device.":"Today’s settings loaded.";
- }catch(e){statusBox.textContent="Settings could not load. Try again shortly.";}
-}
 function shuffle(arr){return arr.sort(()=>Math.random()-.5)}
 function pickPrize(){
   let roll = Math.random() * 100;
@@ -153,10 +136,7 @@ function makeResult(){
 
   return shuffle([ALL_SYMBOLS[0],ALL_SYMBOLS[0],ALL_SYMBOLS[1],ALL_SYMBOLS[1],ALL_SYMBOLS[2],ALL_SYMBOLS[2],ALL_SYMBOLS[3],ALL_SYMBOLS[4],ALL_SYMBOLS[5]]);
 }
- const win=Math.random()<WIN_CHANCE;
- if(win){const s=ALL_SYMBOLS[Math.floor(Math.random()*ALL_SYMBOLS.length)];let p=[s,s,s];while(p.length<9)p.push(ALL_SYMBOLS[Math.floor(Math.random()*ALL_SYMBOLS.length)]);return shuffle(p)}
- return shuffle([ALL_SYMBOLS[0],ALL_SYMBOLS[0],ALL_SYMBOLS[1],ALL_SYMBOLS[1],ALL_SYMBOLS[2],ALL_SYMBOLS[2],ALL_SYMBOLS[3],ALL_SYMBOLS[4],ALL_SYMBOLS[5]])
-}
+  
 function hasThreeMatch(arr){const c={};arr.forEach(s=>c[s]=(c[s]||0)+1);return Object.values(c).some(v=>v>=3)}
 function renderSymbols(){generatedSymbols=makeResult();symbolsBox.innerHTML="";generatedSymbols.forEach(sym=>{const d=document.createElement("div");d.className="symbol";d.textContent=sym;symbolsBox.appendChild(d)})}
 function sizeCanvas(){const r=document.getElementById("scratchCard").getBoundingClientRect();canvas.width=r.width-28;canvas.height=r.height-28;drawCover()}

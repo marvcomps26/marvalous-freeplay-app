@@ -129,10 +129,14 @@ function makeResult(){
 
   if(currentPrize.prize.toUpperCase() !== "TRY AGAIN"){
     const s = ALL_SYMBOLS[Math.floor(Math.random() * ALL_SYMBOLS.length)];
-    let p = [s, s, s];
-    while(p.length < 9) p.push(ALL_SYMBOLS[Math.floor(Math.random() * ALL_SYMBOLS.length)]);
-    return shuffle(p);
-  }
+let others = ALL_SYMBOLS.filter(sym => sym !== s);
+let p = [s, s, s];
+
+while(p.length < 9){
+  p.push(others[Math.floor(Math.random() * others.length)]);
+}
+
+return shuffle(p);
 
   return shuffle([ALL_SYMBOLS[0],ALL_SYMBOLS[0],ALL_SYMBOLS[1],ALL_SYMBOLS[1],ALL_SYMBOLS[2],ALL_SYMBOLS[2],ALL_SYMBOLS[3],ALL_SYMBOLS[4],ALL_SYMBOLS[5]]);
 }

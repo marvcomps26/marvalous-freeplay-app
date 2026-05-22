@@ -201,6 +201,8 @@ fetch("https://script.google.com/macros/s/AKfycbwqv0mOcwHVa2AaGzvwMLjw-nqV4LonCg
   modalTitle.textContent = "Claim Sent!";
   resultText.textContent = "";
   resultSmall.textContent = "The Marvalous team will check your claim and email your prize code if valid 💜";
+  document.getElementById("doneBtn").style.display = "inline-block";
+document.getElementById("doneBtn").textContent = "Done";
 }).catch(() => {
   alert("Something went wrong sending your claim.");
 });

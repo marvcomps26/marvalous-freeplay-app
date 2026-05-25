@@ -95,7 +95,8 @@ async function loadSettings(){
       chance: parseFloat(row[1]),
       claimType: row[2],
       minSpend: row[3],
-      expiry: row[4]
+      expiry: row[4],
+      code: row[5] || ""
     });
   }
 
@@ -148,20 +149,43 @@ function getPos(e){const r=canvas.getBoundingClientRect(),t=e.touches?e.touches[
 function scratch(e){if(gameArea.classList.contains("locked")||revealed)return;e.preventDefault();const p=getPos(e);ctx.globalCompositeOperation="destination-out";ctx.beginPath();ctx.arc(p.x,p.y,23,0,Math.PI*2);ctx.fill();checkScratchAmount()}
 function checkScratchAmount(){const img=ctx.getImageData(0,0,canvas.width,canvas.height);let clear=0;for(let i=3;i<img.data.length;i+=4)if(img.data[i]<80)clear++;if(clear/(img.data.length/4)>.45){revealed=true;ctx.clearRect(0,0,canvas.width,canvas.height);localStorage.setItem(playKey,"yes");setTimeout(showResult,2500)}}
 function unlockGame(){const entered=document.getElementById("codeInput").value.trim().toUpperCase();if(entered!==DAILY_CODE){statusBox.textContent="Wrong code. Check the Elite Club daily post.";return}if(localStorage.getItem(playKey)){statusBox.textContent="You’ve already used today’s VIP scratch card on this device.";gameArea.classList.add("locked");return}revealed=false;statusBox.textContent="Unlocked. Scratch your VIP card.";gameArea.classList.remove("locked");renderSymbols();setTimeout(sizeCanvas,50)}
+function copyPrizeCode(){
+  const code = currentPrize && currentPrize.code ? currentPrize.code : "";
+  if(!code) return;
+
+  navigator.clipboard.writeText(code).then(() => {
+    const btn = document.getElementById("copyCodeBtn");
+    if(btn) btn.textContent = "Copied!";
+  }).catch(() => {
+    alert("Copy failed. Please manually copy the code.");
+  });
+}  
 function showResult(){const won = currentPrize && currentPrize.prize.toUpperCase() !== "TRY AGAIN";
 
   if(won){
-    modalTitle.textContent = "Winner!";
-    resultText.textContent = currentPrize.prize;
+  modalTitle.textContent = "Winner!";
+  resultText.textContent = currentPrize.prize;
 
-    resultSmall.innerHTML = `
-      Enter your details to claim.<br><br>
-      ${currentPrize.minSpend && currentPrize.minSpend != "0" ? `Minimum spend £${currentPrize.minSpend}<br>` : ""}
-      ${currentPrize.expiry && currentPrize.expiry !== "none" ? `Valid until ${currentPrize.expiry}<br><br>` : ""}
-      <input id="claimName" placeholder="Your name" style="width:100%;padding:12px;margin-bottom:10px;border-radius:12px;border:none;">
-      <input id="claimEmail" type="email" placeholder="Your email" style="width:100%;padding:12px;margin-bottom:10px;border-radius:12px;border:none;">
-      <button onclick="submitClaim()">Claim Prize</button>
-    `;
+  const hasCode = currentPrize.code && currentPrize.code.trim() !== "";
+
+  resultSmall.innerHTML = `
+    ${hasCode ? `
+      <div style="margin:12px 0;padding:14px;border-radius:16px;background:rgba(255,215,106,.12);border:1px solid rgba(255,215,106,.35);">
+        <div style="font-size:12px;color:rgba(255,255,255,.72);margin-bottom:6px;">Your discount code:</div>
+        <div style="font-size:24px;font-weight:1000;color:#ffd76a;letter-spacing:1px;">${currentPrize.code}</div>
+        <button id="copyCodeBtn" onclick="copyPrizeCode()" style="margin-top:10px;">Copy Code</button>
+      </div>
+      Enter your details below so we can validate your win 💜<br><br>
+    ` : `
+      Enter your details below and we’ll add your site credit shortly 💜<br><br>
+    `}
+    ${currentPrize.minSpend && currentPrize.minSpend != "0" ? `Minimum spend £${currentPrize.minSpend}<br>` : ""}
+    ${currentPrize.expiry && currentPrize.expiry !== "none" ? `Valid until ${currentPrize.expiry}<br><br>` : ""}
+    <input id="claimName" placeholder="Your name" style="width:100%;padding:12px;margin-bottom:10px;border-radius:12px;border:none;">
+    <input id="claimEmail" type="email" placeholder="Your email" style="width:100%;padding:12px;margin-bottom:10px;border-radius:12px;border:none;">
+    <button onclick="submitClaim()">Claim Prize</button>
+  `;
+  }
   } else {
     modalTitle.textContent = "Unlucky!";
     resultText.textContent = "Try Again Tomorrow";
@@ -195,12 +219,15 @@ fetch("https://script.google.com/macros/s/AKfycbwqv0mOcwHVa2AaGzvwMLjw-nqV4LonCg
     prize: currentPrize.prize,
     dailyCode: DAILY_CODE,
     minSpend: currentPrize.minSpend || "",
-    expiry: currentPrize.expiry || ""
+    expiry: currentPrize.expiry || "",
+    code: currentPrize.code || ""
   })
 }).then(() => {
   modalTitle.textContent = "Claim Sent!";
   resultText.textContent = "";
-  resultSmall.textContent = "The Marvalous team will check your claim and email your prize code if valid 💜";
+  resultSmall.textContent = currentPrize.code
+  ? "Your win has been logged successfully 💜 Your discount code is ready to use."
+  : "Your win has been logged successfully 💜 Site credit claims will be checked shortly.";
   document.getElementById("doneBtn").style.display = "inline-block";
 document.getElementById("doneBtn").textContent = "Done";
 }).catch(() => {

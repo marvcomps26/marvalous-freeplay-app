@@ -183,7 +183,7 @@ function showResult(){const won = currentPrize && currentPrize.prize.toUpperCase
     ${currentPrize.expiry && currentPrize.expiry !== "none" ? `Valid until ${currentPrize.expiry}<br><br>` : ""}
     <input id="claimName" placeholder="Your name" style="width:100%;padding:12px;margin-bottom:10px;border-radius:12px;border:none;">
     <input id="claimEmail" type="email" placeholder="Your email" style="width:100%;padding:12px;margin-bottom:10px;border-radius:12px;border:none;">
-    <button onclick="submitClaim()">Claim Prize</button>
+    <button id="claimBtn" onclick="submitClaim()">Claim Prize</button>
   `;
   } else {
     modalTitle.textContent = "Unlucky!";
@@ -207,6 +207,9 @@ function submitClaim(){
     alert("Please enter your name and email.");
     return;
   }
+  const claimBtn = document.getElementById("claimBtn");
+  claimBtn.disabled = true;
+  claimBtn.textContent = "Sending...";
 fetch("https://script.google.com/macros/s/AKfycbwqv0mOcwHVa2AaGzvwMLjw-nqV4LonCg3-MXpDcgcMbhmw2ORo4JmO8JiCxXZkBScC/exec", {
   method: "POST",
   headers: {
@@ -221,7 +224,8 @@ fetch("https://script.google.com/macros/s/AKfycbwqv0mOcwHVa2AaGzvwMLjw-nqV4LonCg
     expiry: currentPrize.expiry || "",
     code: currentPrize.code || ""
   })
-}).then(() => {
+  }).then(response => {
+  if (!response.ok) throw new Error("Failed");
   modalTitle.textContent = "Claim Sent!";
   resultText.textContent = "";
   resultSmall.textContent = currentPrize.code
@@ -230,6 +234,8 @@ fetch("https://script.google.com/macros/s/AKfycbwqv0mOcwHVa2AaGzvwMLjw-nqV4LonCg
   document.getElementById("doneBtn").style.display = "inline-block";
 document.getElementById("doneBtn").textContent = "Done";
 }).catch(() => {
+  claimBtn.disabled = false;
+  claimBtn.textContent = "Claim Prize";
   alert("Something went wrong sending your claim.");
 });
 } 

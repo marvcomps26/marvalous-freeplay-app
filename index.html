@@ -108,5 +108,12 @@ OneSignalDeferred.push(function(OneSignal) {
   setTimeout(function(){ OneSignal.showSlidedownPrompt(); }, 3000);
 });
 </script>
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./OneSignalSDKWorker.js")
+    .then(() => console.log("SW registered"))
+    .catch(err => console.log("SW error", err));
+}
+</script>
 </body>
 </html>

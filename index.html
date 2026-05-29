@@ -110,7 +110,7 @@ OneSignalDeferred.push(function(OneSignal) {
 </script>
 <script>
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("./OneSignalSDKWorker.js")
+  navigator.serviceWorker.register("./onesignalsdkworker.js")
     .then(() => console.log("SW registered"))
     .catch(err => console.log("SW error", err));
 }

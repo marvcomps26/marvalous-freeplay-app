@@ -54,13 +54,30 @@ body{
 .logo{width:150px;max-width:65%;margin:6px auto 18px;display:block}
 .brand{color:var(--gold);font-size:17px;font-weight:1000;letter-spacing:2.4px;text-transform:uppercase;text-shadow:0 0 13px rgba(255,215,106,.7);margin-bottom:10px}
 h1{margin:0;font-size:36px;line-height:.92;text-transform:uppercase;text-shadow:0 0 18px rgba(255,47,214,.65)}
-.sub{max-width:320px;margin:14px auto 22px;color:rgba(255,255,255,.78);line-height:1.35;font-size:15px}
-.btn{
-  display:block;width:100%;text-decoration:none;border-radius:20px;padding:18px 16px;margin:13px 0;
-  font-size:19px;font-weight:1000;color:#160018;
-  background:linear-gradient(135deg,#fff3a6 0%,#ffd76a 38%,#b97818 100%);
-  box-shadow:0 0 22px rgba(255,215,106,.38);border:0;
+.sub{
+  max-width:none;
+  margin:12px 0 24px;
+  color:rgba(255,255,255,.75);
+  text-align:left;
 }
+.btn{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  width:100%;
+  text-decoration:none;
+  border-radius:24px;
+  padding:22px;
+  margin:16px 0;
+  font-size:20px;
+  font-weight:900;
+  color:white;
+  background:rgba(50,16,96,.78);
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+  text-align:left;
+}
+  
 .btn.purple{
   color:white;
   background:#321060;
@@ -83,15 +100,15 @@ h1{margin:0;font-size:36px;line-height:.92;text-transform:uppercase;text-shadow:
 }
 
 .toplogo{
-  width:80px;
-  height:80px;
+  width:65px;
+  height:65px;
   object-fit:contain;
 }
 
 .brand.small{
-  font-size:12px;
-  letter-spacing:1.5px;
-  margin-bottom:4px;
+  font-size:11px;
+  letter-spacing:2px;
+  margin-bottom:2px;
 }
 
 .topbar h1{
@@ -118,9 +135,21 @@ h1{margin:0;font-size:36px;line-height:.92;text-transform:uppercase;text-shadow:
     </div>
 
     <p class="sub">Daily VIP scratch cards, free play drops and quick access to Marvalous competitions.</p>
-    <a class="btn purple" href="https://marvalouscompetitions.co.uk">🏆 Open Website</a>
-    <a class="btn purple" href="scratch.html">🎰 Daily VIP Scratch</a>
-    <a class="btn purple" href="https://marvalouscompetitions.co.uk/i/the-marvalous-league">🏆THE MARVALOUS LEAGUE</a>
+    <a class="btn purple" href="https://marvalouscompetitions.co.uk">
+  <span>🏆 Open Website</span>
+  <span>›</span>
+</a>
+
+<a class="btn purple" href="scratch.html">
+  <span>🎰 Daily VIP Scratch</span>
+  <span>›</span>
+</a>
+
+<a class="btn purple" href="https://marvalouscompetitions.co.uk/i/the-marvalous-league">
+  <span>🏆 THE MARVALOUS LEAGUE</span>
+  <span>›</span>
+</a>
+      
     <div class="install">
       <p><b>iPhone Users</b></p>
       <p>Tap Share or the 3 dots menu, then Add to Home Screen.</p>

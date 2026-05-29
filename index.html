@@ -124,9 +124,14 @@ h1{margin:0;font-size:36px;line-height:.92;text-transform:uppercase;text-shadow:
   line-height:1;
   text-align:left;
 }
+.app-card{display:flex;align-items:center;gap:16px;text-decoration:none;color:white;background:rgba(25,5,45,.78);border:1px solid rgba(160,80,255,.25);border-radius:28px;padding:18px;margin:16px 0;box-shadow:0 10px 30px rgba(0,0,0,.35);}
+.app-icon{min-width:72px;height:72px;border-radius:50%;background:rgba(123,44,255,.22);display:flex;align-items:center;justify-content:center;font-size:34px;box-shadow:0 0 24px rgba(123,44,255,.35);}
+.app-text{flex:1;}
+.app-text h3{margin:0 0 6px;font-size:21px;line-height:1.1;}
+.app-text p{margin:0;font-size:14px;color:rgba(255,255,255,.68);line-height:1.3;}
+.app-arrow{width:42px;height:42px;border-radius:50%;background:#5d1bb0;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:bold;}
+</style>
 
-</style>
-</style>
 </head>
 
 <body>
@@ -142,21 +147,32 @@ h1{margin:0;font-size:36px;line-height:.92;text-transform:uppercase;text-shadow:
     </div>
 
     <p class="sub">Daily VIP scratch cards, free play drops and quick access to Marvalous competitions.</p>
-    <a class="btn purple" href="https://marvalouscompetitions.co.uk">
-  <span>🏆 Open Website</span>
-  <span>›</span>
+  <a class="app-card" href="scratch.html">
+  <div class="app-icon">🎰</div>
+  <div class="app-text">
+    <h3>Daily VIP Scratch</h3>
+    <p>Play today’s free scratch card.</p>
+  </div>
+  <div class="app-arrow">›</div>
 </a>
 
-<a class="btn purple" href="scratch.html">
-  <span>🎰 Daily VIP Scratch</span>
-  <span>›</span>
+<a class="app-card" href="https://marvalouscompetitions.co.uk/i/the-marvalous-league">
+  <div class="app-icon">🏆</div>
+  <div class="app-text">
+    <h3>Marvalous League</h3>
+    <p>Compete and climb the leaderboard.</p>
+  </div>
+  <div class="app-arrow">›</div>
 </a>
 
-<a class="btn purple" href="https://marvalouscompetitions.co.uk/i/the-marvalous-league">
-  <span>🏆 Marvalous League</span>
-  <span>›</span>
-</a>
-      
+<a class="app-card" href="https://marvalouscompetitions.co.uk">
+  <div class="app-icon">🌐</div>
+  <div class="app-text">
+    <h3>Open Website</h3>
+    <p>View all live competitions.</p>
+  </div>
+  <div class="app-arrow">›</div>
+</a>       
     <div class="install">
   <p><b>📲 Install Marvalous Hub</b></p>
   <p>Save the hub to your phone for quicker access.</p>

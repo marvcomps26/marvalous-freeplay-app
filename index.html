@@ -68,6 +68,35 @@ h1{margin:0;font-size:36px;line-height:.92;text-transform:uppercase;text-shadow:
 .install{margin-top:22px;padding:16px;border-radius:24px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06)}
 .install p{margin:6px 0;color:rgba(255,255,255,.72);font-size:14px}
 .android-install{background:#321060;color:white;padding:14px 18px;border-radius:14px;font-size:16px;font-weight:900;border:none;margin-top:12px;box-shadow:0 0 18px rgba(123,44,255,.55)}
+.android-install{background:#321060;color:white;}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:20px;
+}
+
+.toplogo{
+  width:80px;
+  height:80px;
+  object-fit:contain;
+}
+
+.brand.small{
+  font-size:12px;
+  letter-spacing:1.5px;
+  margin-bottom:4px;
+}
+
+.topbar h1{
+  margin:0;
+  font-size:32px;
+  line-height:1;
+  text-align:left;
+}
+
+</style>
 </style>
 </head>
 
@@ -75,9 +104,14 @@ h1{margin:0;font-size:36px;line-height:.92;text-transform:uppercase;text-shadow:
 <div class="sparkle"></div>
 <main class="app">
   <section class="card">
-    <img src="logo.png" class="logo" onerror="this.style.display='none'">
-    <div class="brand">Marvalous Competitions</div>
-    <h1>Free Play<br>Hub</h1>
+    <div class="topbar">
+  <img src="logo.png" class="toplogo" onerror="this.style.display='none'">
+  <div>
+    <div class="brand small">Marvalous Competitions</div>
+    <h1>Free Play Hub</h1>
+  </div>
+    </div>
+
     <p class="sub">Daily VIP scratch cards, free play drops and quick access to Marvalous competitions.</p>
     <a class="btn purple" href="https://marvalouscompetitions.co.uk">🏆 Open Website</a>
     <a class="btn purple" href="scratch.html">🎰 Daily VIP Scratch</a>

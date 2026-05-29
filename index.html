@@ -333,18 +333,29 @@ h1{margin:0;font-size:36px;line-height:.92;text-transform:uppercase;text-shadow:
 </main>
 
 <script>
+
 let deferredPrompt;
+
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
+
   document.getElementById("installBtn").addEventListener("click", () => {
     deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
+    deferredPrompt.userChoice.then(() => {
+      deferredPrompt = null;
+    });
   });
 });
-</script>
 
-<script>
+window.addEventListener('appinstalled', () => {
+  document.getElementById('installBtn').style.display = 'none';
+});
+
+if (window.matchMedia('(display-mode: standalone)').matches) {
+  document.getElementById('installBtn').style.display = 'none';
+}
+</script>
 window.OneSignalDeferred = window.OneSignalDeferred || [];
 OneSignalDeferred.push(function(OneSignal) {
   setTimeout(function(){ OneSignal.showSlidedownPrompt(); }, 3000);

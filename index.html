@@ -143,6 +143,33 @@ h1{margin:0;font-size:36px;line-height:.92;text-transform:uppercase;text-shadow:
   font-size:22px;
   color:white;
 }
+.install-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:14px 0;
+  padding:10px;
+  border-radius:14px;
+  background:rgba(255,255,255,.05);
+}
+
+.install-icon{
+  font-size:28px;
+  min-width:40px;
+  text-align:center;
+}
+
+.btn-install{
+  width:100%;
+  border:none;
+  border-radius:18px;
+  padding:16px;
+  margin-top:12px;
+  font-size:20px;
+  font-weight:700;
+  color:#fff;
+  background:linear-gradient(180deg,#8c3cff,#5d1bb0);
+}     
 </style>
 
 </head>
@@ -190,13 +217,31 @@ h1{margin:0;font-size:36px;line-height:.92;text-transform:uppercase;text-shadow:
   <div class="app-arrow">›</div>
 </a>       
     <div class="install">
-  <h3>📱 Install Marvalous Hub</h3>
 
-<p>Save the hub to your phone for quicker access.</p>
+<h3>📱 Install Marvalous Hub</h3>
 
-<p><b>iPhone:</b> Tap Share, then Add to Home Screen.</p>
+<p>Add the hub to your home screen for faster access.</p>
 
-<p><b>Android:</b> Tap the install button when it appears.</p>
+<div class="install-row">
+  <span class="install-icon">🍎</span>
+  <div>
+    <strong>iPhone</strong><br>
+    Tap Share → Add to Home Screen
+  </div>
+</div>
+
+<div class="install-row">
+  <span class="install-icon">🤖</span>
+  <div>
+    <strong>Android</strong><br>
+    Tap the Install button when prompted
+  </div>
+</div>
+
+<button id="installBtn" class="btn-install">
+  ⬇ Android Users – Tap Here To Install
+</button>
+
     </div>
 
     <div class="mini">Daily code is dropped inside Marvalous Elite Club. One play per device per daily code.</div>

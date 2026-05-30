@@ -237,7 +237,39 @@ h1{margin:0;font-size:36px;line-height:.92;text-transform:uppercase;text-shadow:
   font-weight:700;
   color:#fff;
   background:linear-gradient(180deg,#8c3cff,#5d1bb0);
-}     
+} 
+.top-ticker{
+  width:100%;
+  overflow:hidden;
+  background:rgba(0,0,0,.25);
+  border:1px solid rgba(255,215,106,.15);
+  border-radius:14px;
+  margin:0 0 16px;
+}
+
+.top-ticker-track{
+  display:flex;
+  width:max-content;
+  animation:tickerScroll 25s linear infinite;
+}
+
+.top-ticker span{
+  color:#ffd76a;
+  font-size:13px;
+  font-weight:800;
+  padding:10px 24px;
+  white-space:nowrap;
+  letter-spacing:.5px;
+}
+
+@keyframes tickerScroll{
+  from{
+    transform:translateX(0);
+  }
+  to{
+    transform:translateX(-50%);
+  }
+}  
 </style>
 
 </head>
@@ -252,7 +284,13 @@ h1{margin:0;font-size:36px;line-height:.92;text-transform:uppercase;text-shadow:
     <h1>Marvalous Hub</h1>
   </div>
     </div>
+<div class="top-ticker">
+  <div class="top-ticker-track">
+    <span>🔥 LIVE DRAW SUNDAY 7PM • ⭐ DAILY VIP SCRATCH • 🏆 WEEKLY LEAGUE POINTS • 🎟️ LATEST COMPETITIONS • 💜 ELITE CLUB EXCLUSIVES • 🔔 ENABLE NOTIFICATIONS</span>
 
+    <span>🔥 LIVE DRAW SUNDAY 7PM • ⭐ DAILY VIP SCRATCH • 🏆 WEEKLY LEAGUE POINTS • 🎟️ LATEST COMPETITIONS • 💜 ELITE CLUB EXCLUSIVES • 🔔 ENABLE NOTIFICATIONS</span>
+  </div>
+</div>
   <div class="sub" style="margin-bottom:30px;">
   <h2 style="margin:0 0 8px;font-size:28px;">Welcome back! 👋</h2>
   <p style="margin:0;">Your home for free play, competitions and exclusive rewards.</p>

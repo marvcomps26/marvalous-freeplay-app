@@ -589,7 +589,8 @@ function unlockGame(){
     gameArea.classList.add("locked");
     return;
   }
-
+  gtag('event','scratch_played');
+  
   revealed=false;
   statusBox.textContent="Unlocked. Scratch your VIP card.";
   gameArea.classList.remove("locked");

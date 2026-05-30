@@ -42,8 +42,20 @@ body:before{
   box-shadow:0 0 28px rgba(143,42,255,.25),inset 0 0 20px rgba(255,255,255,.03);
 }
 .hero{
+  position:relative;
   padding:18px 20px;
   margin-bottom:16px;
+}
+
+.hero-logo{
+  position:absolute;
+  top:24px;
+  right:24px;
+  width:90px;
+  height:90px;
+  object-fit:contain;
+  opacity:.9;
+  filter:drop-shadow(0 0 12px rgba(186,85,255,.8));
 }
 .brand{
   color:#ffd76a;
@@ -327,6 +339,7 @@ canvas{
   <section class="hero hub-card">
   <div class="brand">Marvalous Competitions</div>
   <h1>Daily VIP Scratch</h1>
+  <img src="logo.png" class="hero-logo" alt="Marvalous">
   </section>
 
   <section class="code-card hub-card">

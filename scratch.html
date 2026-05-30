@@ -225,6 +225,19 @@ canvas{
   font-size:11px;
   color:rgba(255,255,255,.74);
 }
+
+.stat-icon-circle{
+  width:42px;
+  height:42px;
+  margin:0 auto 10px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  background:linear-gradient(135deg,#c84dff,#6618c8);
+  box-shadow:0 0 15px rgba(177,84,255,.6);
+}
 .how{
   padding:18px;
 }
@@ -349,11 +362,25 @@ canvas{
 
   <section class="grid-two">
     <div class="info-card hub-card">
-      <div class="info-title">Your Marvalous Stats</div>
+      <div class="info-title">Your Marvalous Stats 💜</div>
       <div class="stats">
-        <div class="stat"><b id="totalPlays">0</b><span>Scratchcards</span></div>
-        <div class="stat"><b id="totalWins">0</b><span>Prizes Won</span></div>
-        <div class="stat"><b id="currentStreak">0</b><span>Streak</span></div>
+        <div class="stat">
+  <div class="stat-icon-circle">🎟️</div>
+  <b id="totalPlays">0</b>
+  <span>Scratchcards</span>
+</div>
+
+<div class="stat">
+  <div class="stat-icon-circle">🏆</div>
+  <b id="totalWins">0</b>
+  <span>Prizes Won</span>
+</div>
+
+<div class="stat">
+  <div class="stat-icon-circle">🔥</div>
+  <b id="currentStreak">0</b>
+  <span>Streak</span>
+</div>
       </div>
     </div>
   </section>

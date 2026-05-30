@@ -35,27 +35,6 @@ body:before{
   padding:28px 18px 34px;
   position:relative;
 }
-.brand{
-  color:#ffd76a;
-  font-size:15px;
-  font-weight:1000;
-  letter-spacing:4px;
-  text-transform:uppercase;
-  text-shadow:0 0 14px rgba(255,215,106,.55);
-}
-h1{
-  margin:6px 0 0;
-  font-size:44px;
-  line-height:.92;
-  text-transform:uppercase;
-  text-shadow:0 0 20px rgba(180,77,255,.55);
-}
-.welcome{
-  margin:16px 0 26px;
-  color:rgba(255,255,255,.78);
-  font-size:20px;
-  line-height:1.25;
-}
 .hub-card{
   border-radius:34px;
   background:linear-gradient(145deg,rgba(55,0,78,.88),rgba(13,0,20,.92));
@@ -63,35 +42,28 @@ h1{
   box-shadow:0 0 28px rgba(143,42,255,.25),inset 0 0 20px rgba(255,255,255,.03);
 }
 .hero{
-  padding:24px 20px;
+  padding:22px 20px;
   margin-bottom:18px;
 }
-.hero-top{
-  display:flex;
-  gap:18px;
-  align-items:center;
+.brand{
+  color:#ffd76a;
+  font-size:14px;
+  font-weight:1000;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  text-shadow:0 0 14px rgba(255,215,106,.55);
 }
-.icon-orb{
-  width:118px;
-  height:118px;
-  flex:0 0 118px;
-  border-radius:999px;
-  display:grid;
-  place-items:center;
-  font-size:54px;
-  background:radial-gradient(circle,rgba(143,42,255,.34),rgba(15,0,22,.9));
-  border:6px solid rgba(177,84,255,.82);
-  box-shadow:0 0 28px rgba(177,84,255,.75);
+h1{
+  margin:10px 0 0;
+  font-size:39px;
+  line-height:.92;
+  text-transform:uppercase;
+  text-shadow:0 0 20px rgba(180,77,255,.55);
 }
-.hero h2{
-  margin:0;
-  font-size:28px;
-  line-height:1.05;
-}
-.hero p{
-  margin:8px 0 0;
-  color:rgba(255,255,255,.72);
-  font-size:17px;
+.welcome{
+  margin:12px 0 0;
+  color:rgba(255,255,255,.78);
+  font-size:18px;
   line-height:1.25;
 }
 .code-card{
@@ -109,7 +81,10 @@ h1{
   font-size:14px;
   margin-bottom:12px;
 }
-.row{display:flex;gap:10px}
+.row{
+  display:flex;
+  gap:10px;
+}
 input{
   flex:1;
   min-width:0;
@@ -218,9 +193,6 @@ canvas{
   color:rgba(255,255,255,.58);
 }
 .grid-two{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:14px;
   margin-bottom:18px;
 }
 .info-card{
@@ -252,21 +224,6 @@ canvas{
 .stat span{
   font-size:11px;
   color:rgba(255,255,255,.74);
-}
-.pool{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:8px;
-}
-.prize{
-  text-align:center;
-  padding:10px 6px;
-  border-radius:14px;
-  color:#ffd76a;
-  font-weight:1000;
-  background:rgba(15,0,22,.62);
-  border:1px solid rgba(221,71,255,.55);
-  box-shadow:0 0 12px rgba(177,84,255,.18);
 }
 .how{
   padding:18px;
@@ -361,20 +318,12 @@ canvas{
 
   <section class="hero hub-card">
     <div class="brand">Marvalous Competitions</div>
-    <h1>Daily VIP<br>Scratch</h1>
-    <p class="welcome">Play today’s free scratch card and reveal exclusive rewards.</p>
-
-    <div class="hero-top">
-      <div class="icon-orb">🎟️</div>
-      <div>
-        <h2>Match 3 to win</h2>
-        <p>Enter today’s code, scratch the card and reveal your symbols.</p>
-      </div>
-    </div>
+    <h1>Daily VIP Scratch</h1>
+    <p class="welcome">Enter today’s code, scratch the card and match 3 symbols to win.</p>
   </section>
 
   <section class="code-card hub-card">
-    <div class="code-title">Enter today’s code</div>
+    <div class="code-title">Enter Today’s Code</div>
     <div class="code-sub">Find today’s code on the Marvalous Facebook page.</div>
     <div class="row">
       <input id="codeInput" placeholder="Enter daily code">
@@ -405,19 +354,6 @@ canvas{
         <div class="stat"><b id="totalPlays">0</b><span>Scratchcards</span></div>
         <div class="stat"><b id="totalWins">0</b><span>Prizes Won</span></div>
         <div class="stat"><b id="currentStreak">0</b><span>Streak</span></div>
-      </div>
-    </div>
-
-    <div class="info-card hub-card">
-      <div class="info-title">Today’s Prize Pool</div>
-      <div class="pool">
-        <div class="prize">50% OFF</div>
-        <div class="prize">40% OFF</div>
-        <div class="prize">30% OFF</div>
-        <div class="prize">25% OFF</div>
-        <div class="prize">20% OFF</div>
-        <div class="prize">£5 Credit</div>
-        <div class="prize">50p Credit</div>
       </div>
     </div>
   </section>
@@ -483,7 +419,9 @@ function addPlayStats(won){
   updateStats();
 }
 
-function csvSplit(row){return row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g).map(v=>v.replace(/^"|"$/g,"").trim())}
+function csvSplit(row){
+  return row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g).map(v=>v.replace(/^"|"$/g,"").trim())
+}
 
 async function loadSettings(){
  try{
@@ -518,7 +456,9 @@ async function loadSettings(){
  }
 }
 
-function shuffle(arr){return arr.sort(()=>Math.random()-.5)}
+function shuffle(arr){
+  return arr.sort(()=>Math.random()-.5)
+}
 
 function pickPrize(){
   let roll = Math.random() * 100;
@@ -616,15 +556,18 @@ function checkScratchAmount(){
 
 function unlockGame(){
   const entered=document.getElementById("codeInput").value.trim().toUpperCase();
+
   if(entered!==DAILY_CODE){
     statusBox.textContent="Wrong code. Check the Elite Club daily post.";
     return;
   }
+
   if(localStorage.getItem(playKey)){
     statusBox.textContent="You’ve already used today’s VIP scratch card on this device.";
     gameArea.classList.add("locked");
     return;
   }
+
   revealed=false;
   statusBox.textContent="Unlocked. Scratch your VIP card.";
   gameArea.classList.remove("locked");
@@ -717,11 +660,13 @@ function submitClaim(){
     })
   }).then(response => {
     if (!response.ok) throw new Error("Failed");
+
     modalTitle.textContent = "Claim Sent!";
     resultText.textContent = "";
     resultSmall.textContent = currentPrize.code
       ? "Your win has been logged successfully 💜 Your discount code is ready to use."
       : "Your win has been logged successfully 💜 Site credit claims will be checked shortly.";
+
     document.getElementById("doneBtn").style.display = "inline-block";
     document.getElementById("doneBtn").textContent = "Done";
   }).catch(() => {
@@ -731,15 +676,21 @@ function submitClaim(){
   });
 }
 
-function closeModal(){modal.classList.remove("show")}
+function closeModal(){
+  modal.classList.remove("show")
+}
 
 canvas.addEventListener("mousedown",e=>{isDrawing=true;scratch(e)});
 canvas.addEventListener("mousemove",e=>{if(isDrawing)scratch(e)});
 window.addEventListener("mouseup",()=>isDrawing=false);
+
 canvas.addEventListener("touchstart",e=>{isDrawing=true;scratch(e)},{passive:false});
 canvas.addEventListener("touchmove",e=>{if(isDrawing)scratch(e)},{passive:false});
 canvas.addEventListener("touchend",()=>isDrawing=false);
-window.addEventListener("resize",()=>{if(!gameArea.classList.contains("locked")&&!revealed)sizeCanvas()});
+
+window.addEventListener("resize",()=>{
+  if(!gameArea.classList.contains("locked")&&!revealed)sizeCanvas()
+});
 
 renderSymbols();
 sizeCanvas();

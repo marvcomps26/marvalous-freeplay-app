@@ -5,59 +5,437 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="theme-color" content="#070009" />
 <title>Marvalous Daily VIP Scratch</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;font-family:Arial,Helvetica,sans-serif;color:#fff;background:radial-gradient(circle at 50% -10%,rgba(255,215,106,.22),transparent 28%),radial-gradient(circle at top left,rgba(139,44,255,.32),transparent 34%),linear-gradient(180deg,#120018 0%,#070009 55%,#000 100%);}
-.app{width:min(430px,100%);margin:0 auto;min-height:100vh;padding:18px 16px 30px;}
-.back{display:inline-block;color:white;text-decoration:none;font-weight:900;margin:4px 0 14px;opacity:.86}
-.header{text-align:center;padding:20px 16px 18px;border-radius:30px;background:rgba(8,0,11,.82);border:1px solid rgba(255,215,106,.38);box-shadow:0 0 38px rgba(255,215,106,.16),0 0 26px rgba(139,44,255,.35)}
-.brand{color:#ffd76a;font-size:17px;font-weight:1000;letter-spacing:2.6px;text-transform:uppercase;text-shadow:0 0 13px rgba(255,215,106,.65);margin-bottom:10px}
-h1{margin:0;font-size:35px;line-height:.9;text-transform:uppercase;text-shadow:0 0 18px rgba(255,47,214,.45)}
-.sub{margin:12px auto 0;max-width:310px;color:rgba(255,255,255,.78);font-size:14px;line-height:1.35}
-.row{display:flex;gap:8px;margin-top:16px}
-input{flex:1;min-width:0;padding:14px 12px;border-radius:16px;border:1px solid rgba(255,215,106,.34);outline:none;background:rgba(255,255,255,.06);color:#fff;font-size:16px;text-transform:uppercase}
-button{border:0;border-radius:16px;padding:14px 15px;font-weight:1000;color:#13000d;background:linear-gradient(135deg,#fff3a6,#ffd76a,#b97818);box-shadow:0 0 20px rgba(255,215,106,.42);cursor:pointer}
-.status{margin-top:10px;min-height:20px;font-size:13px;color:rgba(255,255,255,.74)}
-.stage{margin-top:18px;padding:16px;border-radius:34px;background:linear-gradient(135deg,rgba(255,215,106,.16),rgba(139,44,255,.12),rgba(255,47,214,.08));border:1px solid rgba(255,215,106,.25);box-shadow:0 24px 58px rgba(0,0,0,.52)}
-.game-title{text-align:center;font-size:23px;font-weight:1000;text-transform:uppercase;margin-top:2px}
-.game-sub{text-align:center;color:rgba(255,255,255,.67);font-size:13px;margin:5px 0 14px}
-.ticket{position:relative;padding:14px;border-radius:26px;background:linear-gradient(145deg,#1b021f,#070009 55%,#1a011d);border:2px solid rgba(255,215,106,.5);box-shadow:inset 0 0 22px rgba(255,215,106,.08),0 0 30px rgba(255,215,106,.13)}
-.banner{text-align:center;margin-bottom:12px;padding:10px;border-radius:18px;background:linear-gradient(135deg,rgba(255,215,106,.2),rgba(255,47,214,.08));border:1px solid rgba(255,215,106,.25);color:#ffd76a;font-weight:1000;text-transform:uppercase}
-.card{position:relative;border-radius:22px;padding:14px;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.12);overflow:hidden}
-.symbols{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;position:relative;z-index:1}
-.symbol{height:76px;border-radius:18px;display:grid;place-items:center;font-size:34px;background:linear-gradient(180deg,rgba(255,215,106,.16),rgba(255,255,255,.05));border:1px solid rgba(255,215,106,.24);user-select:none}
-canvas{position:absolute;inset:14px;width:calc(100% - 28px);height:calc(100% - 28px);z-index:3;border-radius:19px;touch-action:none}
-.locked canvas{pointer-events:none}.locked .ticket{opacity:.48}
-.hint,.footer{text-align:center;margin-top:12px;font-size:12px;color:rgba(255,255,255,.58)}
-.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.78);z-index:99}
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Arial,Helvetica,sans-serif;
+  color:#fff;
+  background:
+    radial-gradient(circle at 20% 15%,rgba(151,71,255,.45),transparent 28%),
+    radial-gradient(circle at 80% 8%,rgba(255,215,106,.14),transparent 24%),
+    linear-gradient(180deg,#2a0040 0%,#120018 38%,#050008 100%);
+  overflow-x:hidden;
+}
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background-image:radial-gradient(rgba(255,215,106,.42) 1.2px,transparent 1.2px);
+  background-size:42px 42px;
+  opacity:.28;
+}
+.app{
+  width:min(430px,100%);
+  margin:0 auto;
+  min-height:100vh;
+  padding:28px 18px 34px;
+  position:relative;
+}
+.brand{
+  color:#ffd76a;
+  font-size:15px;
+  font-weight:1000;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  text-shadow:0 0 14px rgba(255,215,106,.55);
+}
+h1{
+  margin:6px 0 0;
+  font-size:44px;
+  line-height:.92;
+  text-transform:uppercase;
+  text-shadow:0 0 20px rgba(180,77,255,.55);
+}
+.welcome{
+  margin:16px 0 26px;
+  color:rgba(255,255,255,.78);
+  font-size:20px;
+  line-height:1.25;
+}
+.hub-card{
+  border-radius:34px;
+  background:linear-gradient(145deg,rgba(55,0,78,.88),rgba(13,0,20,.92));
+  border:1px solid rgba(182,68,255,.42);
+  box-shadow:0 0 28px rgba(143,42,255,.25),inset 0 0 20px rgba(255,255,255,.03);
+}
+.hero{
+  padding:24px 20px;
+  margin-bottom:18px;
+}
+.hero-top{
+  display:flex;
+  gap:18px;
+  align-items:center;
+}
+.icon-orb{
+  width:118px;
+  height:118px;
+  flex:0 0 118px;
+  border-radius:999px;
+  display:grid;
+  place-items:center;
+  font-size:54px;
+  background:radial-gradient(circle,rgba(143,42,255,.34),rgba(15,0,22,.9));
+  border:6px solid rgba(177,84,255,.82);
+  box-shadow:0 0 28px rgba(177,84,255,.75);
+}
+.hero h2{
+  margin:0;
+  font-size:28px;
+  line-height:1.05;
+}
+.hero p{
+  margin:8px 0 0;
+  color:rgba(255,255,255,.72);
+  font-size:17px;
+  line-height:1.25;
+}
+.code-card{
+  padding:16px;
+  margin-bottom:18px;
+}
+.code-title{
+  font-size:18px;
+  font-weight:1000;
+  text-transform:uppercase;
+  margin-bottom:6px;
+}
+.code-sub{
+  color:rgba(255,255,255,.7);
+  font-size:14px;
+  margin-bottom:12px;
+}
+.row{display:flex;gap:10px}
+input{
+  flex:1;
+  min-width:0;
+  padding:15px 14px;
+  border-radius:18px;
+  border:1px solid rgba(177,84,255,.42);
+  outline:none;
+  background:rgba(9,0,14,.7);
+  color:#fff;
+  font-size:16px;
+  text-transform:uppercase;
+}
+button{
+  border:0;
+  border-radius:18px;
+  padding:15px 17px;
+  font-weight:1000;
+  color:#13000d;
+  background:linear-gradient(135deg,#fff4ad,#ffd76a,#c47a18);
+  box-shadow:0 0 20px rgba(255,215,106,.38);
+  cursor:pointer;
+}
+.status{
+  margin-top:10px;
+  min-height:20px;
+  font-size:13px;
+  color:rgba(255,255,255,.7);
+  text-align:center;
+}
+.stage{
+  padding:16px;
+  margin-bottom:18px;
+}
+.game-title{
+  text-align:center;
+  font-size:27px;
+  font-weight:1000;
+  text-transform:uppercase;
+}
+.game-sub{
+  text-align:center;
+  color:rgba(255,255,255,.7);
+  font-size:14px;
+  margin:7px 0 16px;
+}
+.ticket{
+  position:relative;
+  padding:14px;
+  border-radius:30px;
+  background:linear-gradient(145deg,#25002f,#08000d 60%,#24002f);
+  border:2px solid rgba(255,215,106,.45);
+  box-shadow:0 0 26px rgba(177,84,255,.34),inset 0 0 22px rgba(255,215,106,.07);
+}
+.banner{
+  text-align:center;
+  margin-bottom:12px;
+  padding:12px;
+  border-radius:22px;
+  background:rgba(255,215,106,.08);
+  border:1px solid rgba(255,215,106,.25);
+  color:#ffd76a;
+  font-weight:1000;
+  text-transform:uppercase;
+  letter-spacing:.4px;
+}
+.card{
+  position:relative;
+  border-radius:24px;
+  padding:14px;
+  background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.025));
+  border:1px solid rgba(255,255,255,.12);
+  overflow:hidden;
+}
+.symbols{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  position:relative;
+  z-index:1;
+}
+.symbol{
+  height:70px;
+  border-radius:18px;
+  display:grid;
+  place-items:center;
+  font-size:32px;
+  background:linear-gradient(180deg,rgba(255,215,106,.14),rgba(166,61,255,.12));
+  border:1px solid rgba(255,215,106,.22);
+  user-select:none;
+}
+canvas{
+  position:absolute;
+  inset:14px;
+  width:calc(100% - 28px);
+  height:calc(100% - 28px);
+  z-index:3;
+  border-radius:19px;
+  touch-action:none;
+}
+.locked canvas{pointer-events:none}
+.locked .ticket{opacity:.5}
+.hint{
+  text-align:center;
+  margin-top:12px;
+  font-size:12px;
+  color:rgba(255,255,255,.58);
+}
+.grid-two{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
+  margin-bottom:18px;
+}
+.info-card{
+  padding:18px;
+}
+.info-title{
+  font-size:19px;
+  font-weight:1000;
+  text-transform:uppercase;
+  margin-bottom:12px;
+}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+.stat{
+  text-align:center;
+  padding:12px 6px;
+  border-radius:16px;
+  background:rgba(15,0,22,.62);
+  border:1px solid rgba(177,84,255,.35);
+}
+.stat b{
+  display:block;
+  color:#ffd76a;
+  font-size:22px;
+}
+.stat span{
+  font-size:11px;
+  color:rgba(255,255,255,.74);
+}
+.pool{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+}
+.prize{
+  text-align:center;
+  padding:10px 6px;
+  border-radius:14px;
+  color:#ffd76a;
+  font-weight:1000;
+  background:rgba(15,0,22,.62);
+  border:1px solid rgba(221,71,255,.55);
+  box-shadow:0 0 12px rgba(177,84,255,.18);
+}
+.how{
+  padding:18px;
+}
+.steps{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+.step{
+  padding:12px 8px;
+  text-align:center;
+  border-radius:18px;
+  background:rgba(15,0,22,.62);
+  border:1px solid rgba(177,84,255,.35);
+  font-size:12px;
+  color:rgba(255,255,255,.78);
+}
+.step b{
+  display:grid;
+  place-items:center;
+  width:34px;
+  height:34px;
+  border-radius:999px;
+  margin:0 auto 8px;
+  background:linear-gradient(135deg,#c84dff,#6618c8);
+  box-shadow:0 0 15px rgba(177,84,255,.65);
+  font-size:18px;
+  color:#fff;
+}
+.back{
+  display:block;
+  width:max-content;
+  margin:18px auto 0;
+  padding:15px 28px;
+  border-radius:18px;
+  text-decoration:none;
+  color:#fff;
+  font-weight:1000;
+  background:linear-gradient(135deg,#c84dff,#6618c8);
+  box-shadow:0 0 24px rgba(177,84,255,.58);
+}
+.footer{
+  text-align:center;
+  margin-top:12px;
+  font-size:11px;
+  color:rgba(255,255,255,.45);
+}
+.modal{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.78);
+  z-index:99;
+}
 .modal.show{display:flex}
-.box{width:min(380px,100%);text-align:center;border-radius:32px;padding:26px 18px;background:linear-gradient(180deg,#22002c,#070009);border:1px solid rgba(255,215,106,.42);box-shadow:0 0 50px rgba(255,215,106,.22),0 0 34px rgba(139,44,255,.38)}
-.box h2{margin:0 0 8px;font-size:32px;text-transform:uppercase}
-.result{margin:16px 0;color:#ffd76a;font-size:27px;font-weight:1000;text-transform:uppercase;text-shadow:0 0 14px rgba(255,215,106,.72)}
-.small{color:rgba(255,255,255,.72);font-size:13px;line-height:1.4}
+.box{
+  width:min(380px,100%);
+  text-align:center;
+  border-radius:32px;
+  padding:26px 18px;
+  background:linear-gradient(180deg,#22002c,#070009);
+  border:1px solid rgba(255,215,106,.42);
+  box-shadow:0 0 50px rgba(255,215,106,.22),0 0 34px rgba(139,44,255,.38);
+}
+.box h2{
+  margin:0 0 8px;
+  font-size:32px;
+  text-transform:uppercase;
+}
+.result{
+  margin:16px 0;
+  color:#ffd76a;
+  font-size:27px;
+  font-weight:1000;
+  text-transform:uppercase;
+  text-shadow:0 0 14px rgba(255,215,106,.72);
+}
+.small{
+  color:rgba(255,255,255,.72);
+  font-size:13px;
+  line-height:1.4;
+}
 </style>
 </head>
+
 <body>
 <main class="app">
-<a class="back" href="index.html">← Back to Hub</a>
-<section class="header">
-<div class="brand">Marvalous Competitions</div>
-<h1>Daily VIP<br>Scratch</h1>
-<p class="sub">Enter today’s Elite Club code. Match any 3 symbols to win today’s prize.</p>
-<div class="row"><input id="codeInput" placeholder="Enter daily code"><button onclick="unlockGame()">Unlock</button></div>
-<div id="status" class="status">Loading today’s settings...</div>
-</section>
-<section id="gameArea" class="stage locked">
-<div class="game-title">Premium Free Play</div>
-<div class="game-sub">Scratch the card and reveal your symbols.</div>
-<div class="ticket">
-<div class="banner" id="banner">Match 3 = Today’s Prize</div>
-<div class="card" id="scratchCard"><div class="symbols" id="symbols"></div><canvas id="scratchCanvas"></canvas></div>
-</div>
-<div class="hint">Scratch the silver panel with your finger.</div>
-</section>
-<div class="footer">One play per device per daily code. Screenshot wins to claim.</div>
+
+  <section class="hero hub-card">
+    <div class="brand">Marvalous Competitions</div>
+    <h1>Daily VIP<br>Scratch</h1>
+    <p class="welcome">Play today’s free scratch card and reveal exclusive rewards.</p>
+
+    <div class="hero-top">
+      <div class="icon-orb">🎟️</div>
+      <div>
+        <h2>Match 3 to win</h2>
+        <p>Enter today’s code, scratch the card and reveal your symbols.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="code-card hub-card">
+    <div class="code-title">Enter today’s code</div>
+    <div class="code-sub">Find today’s code on the Marvalous Facebook page.</div>
+    <div class="row">
+      <input id="codeInput" placeholder="Enter daily code">
+      <button onclick="unlockGame()">Unlock</button>
+    </div>
+    <div id="status" class="status">Loading today’s settings...</div>
+  </section>
+
+  <section id="gameArea" class="stage hub-card locked">
+    <div class="game-title">Premium Free Play</div>
+    <div class="game-sub">Scratch the card and reveal your symbols.</div>
+
+    <div class="ticket">
+      <div class="banner" id="banner">⭐ Match 3 = Today’s Prize ⭐</div>
+      <div class="card" id="scratchCard">
+        <div class="symbols" id="symbols"></div>
+        <canvas id="scratchCanvas"></canvas>
+      </div>
+    </div>
+
+    <div class="hint">Scratch the silver panel with your finger.</div>
+  </section>
+
+  <section class="grid-two">
+    <div class="info-card hub-card">
+      <div class="info-title">Your Marvalous Stats</div>
+      <div class="stats">
+        <div class="stat"><b id="totalPlays">0</b><span>Scratchcards</span></div>
+        <div class="stat"><b id="totalWins">0</b><span>Prizes Won</span></div>
+        <div class="stat"><b id="currentStreak">0</b><span>Streak</span></div>
+      </div>
+    </div>
+
+    <div class="info-card hub-card">
+      <div class="info-title">Today’s Prize Pool</div>
+      <div class="pool">
+        <div class="prize">50% OFF</div>
+        <div class="prize">40% OFF</div>
+        <div class="prize">30% OFF</div>
+        <div class="prize">25% OFF</div>
+        <div class="prize">20% OFF</div>
+        <div class="prize">£5 Credit</div>
+        <div class="prize">50p Credit</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="how hub-card">
+    <div class="info-title">How It Works</div>
+    <div class="steps">
+      <div class="step"><b>1</b>Find today’s code</div>
+      <div class="step"><b>2</b>Enter the code</div>
+      <div class="step"><b>3</b>Scratch all panels</div>
+      <div class="step"><b>4</b>Match 3 symbols</div>
+    </div>
+  </section>
+
+  <a class="back" href="index.html">← Back To Marvalous Hub</a>
+  <div class="footer">One play per device per daily code.</div>
 </main>
+
 <form name="scratch-claim" method="POST" data-netlify="true" hidden>
   <input type="text" name="name">
   <input type="email" name="email">
@@ -66,7 +444,16 @@ canvas{position:absolute;inset:14px;width:calc(100% - 28px);height:calc(100% - 2
   <input type="text" name="minSpend">
   <input type="text" name="expiry">
 </form>
-<div class="modal" id="modal"><div class="box"><h2 id="modalTitle">Result</h2><div class="result" id="resultText"></div><p class="small" id="resultSmall"></p><button id="doneBtn" onclick="closeModal()">Done</button></div></div>
+
+<div class="modal" id="modal">
+  <div class="box">
+    <h2 id="modalTitle">Result</h2>
+    <div class="result" id="resultText"></div>
+    <p class="small" id="resultSmall"></p>
+    <button id="doneBtn" onclick="closeModal()">Done</button>
+  </div>
+</div>
+
 <script>
 const SETTINGS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSlaiXI-x0C_wLvxmELI21rTu9uFR87MYtx9gqV_z_Z3hZ5nOCQBnb9No6i9MtZyqBD3c9wTo1tmz6x/pub?output=csv";
 let DAILY_CODE = "MARVDAILY";
@@ -74,7 +461,30 @@ let PRIZES = [];
 const ALL_SYMBOLS = ["💷","💎","🎁","🔥","⚡","👑","🍀","⭐","💜"];
 const gameArea=document.getElementById("gameArea"),symbolsBox=document.getElementById("symbols"),statusBox=document.getElementById("status"),canvas=document.getElementById("scratchCanvas"),ctx=canvas.getContext("2d"),modal=document.getElementById("modal"),modalTitle=document.getElementById("modalTitle"),resultText=document.getElementById("resultText"),resultSmall=document.getElementById("resultSmall"),banner=document.getElementById("banner");
 let playKey="",generatedSymbols=[],isDrawing=false,revealed=false,currentPrize=null;
+
+function updateStats(){
+  document.getElementById("totalPlays").textContent = localStorage.getItem("marvScratchTotalPlays") || "0";
+  document.getElementById("totalWins").textContent = localStorage.getItem("marvScratchTotalWins") || "0";
+  document.getElementById("currentStreak").textContent = localStorage.getItem("marvScratchStreak") || "0";
+}
+
+function addPlayStats(won){
+  const plays = Number(localStorage.getItem("marvScratchTotalPlays") || 0) + 1;
+  localStorage.setItem("marvScratchTotalPlays", plays);
+
+  const streak = Number(localStorage.getItem("marvScratchStreak") || 0) + 1;
+  localStorage.setItem("marvScratchStreak", streak);
+
+  if(won){
+    const wins = Number(localStorage.getItem("marvScratchTotalWins") || 0) + 1;
+    localStorage.setItem("marvScratchTotalWins", wins);
+  }
+
+  updateStats();
+}
+
 function csvSplit(row){return row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g).map(v=>v.replace(/^"|"$/g,"").trim())}
+
 async function loadSettings(){
  try{
   const res = await fetch(SETTINGS_CSV_URL + "&t=" + Date.now(), {cache:"no-store"});
@@ -82,14 +492,11 @@ async function loadSettings(){
   const lines = text.trim().split(/\r?\n/);
 
   DAILY_CODE = csvSplit(lines[0])[1].trim().toUpperCase();
-
   PRIZES = [];
 
   for(let i=4; i<lines.length; i++){
     if(!lines[i].trim()) continue;
-
     const row = csvSplit(lines[i]);
-
     PRIZES.push({
       prize: row[0],
       chance: parseFloat(row[1]),
@@ -112,6 +519,7 @@ async function loadSettings(){
 }
 
 function shuffle(arr){return arr.sort(()=>Math.random()-.5)}
+
 function pickPrize(){
   let roll = Math.random() * 100;
   let total = 0;
@@ -129,26 +537,101 @@ function makeResult(){
 
   if(currentPrize.prize.toUpperCase() !== "TRY AGAIN"){
     const s = ALL_SYMBOLS[Math.floor(Math.random() * ALL_SYMBOLS.length)];
-let others = ALL_SYMBOLS.filter(sym => sym !== s);
-let p = [s, s, s];
+    let others = ALL_SYMBOLS.filter(sym => sym !== s);
+    let p = [s, s, s];
 
-while(p.length < 9){
-  p.push(others[Math.floor(Math.random() * others.length)]);
-}
+    while(p.length < 9){
+      p.push(others[Math.floor(Math.random() * others.length)]);
+    }
 
-return shuffle(p);
-}
+    return shuffle(p);
+  }
+
   return shuffle([ALL_SYMBOLS[0],ALL_SYMBOLS[0],ALL_SYMBOLS[1],ALL_SYMBOLS[1],ALL_SYMBOLS[2],ALL_SYMBOLS[2],ALL_SYMBOLS[3],ALL_SYMBOLS[4],ALL_SYMBOLS[5]]);
 }
-  
-function hasThreeMatch(arr){const c={};arr.forEach(s=>c[s]=(c[s]||0)+1);return Object.values(c).some(v=>v>=3)}
-function renderSymbols(){generatedSymbols=makeResult();symbolsBox.innerHTML="";generatedSymbols.forEach(sym=>{const d=document.createElement("div");d.className="symbol";d.textContent=sym;symbolsBox.appendChild(d)})}
-function sizeCanvas(){const r=document.getElementById("scratchCard").getBoundingClientRect();canvas.width=r.width-28;canvas.height=r.height-28;drawCover()}
-function drawCover(){ctx.globalCompositeOperation="source-over";const g=ctx.createLinearGradient(0,0,canvas.width,canvas.height);g.addColorStop(0,"#f8f8f8");g.addColorStop(.25,"#bdbdbd");g.addColorStop(.5,"#eeeeee");g.addColorStop(.75,"#969696");g.addColorStop(1,"#e8e8e8");ctx.fillStyle=g;ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle="rgba(30,30,30,.45)";ctx.font="900 23px Arial";ctx.textAlign="center";ctx.fillText("SCRATCH",canvas.width/2,canvas.height/2-9);ctx.font="800 13px Arial";ctx.fillText("MATCH 3 TO WIN",canvas.width/2,canvas.height/2+18)}
-function getPos(e){const r=canvas.getBoundingClientRect(),t=e.touches?e.touches[0]:e;return{x:(t.clientX-r.left)*(canvas.width/r.width),y:(t.clientY-r.top)*(canvas.height/r.height)}}
-function scratch(e){if(gameArea.classList.contains("locked")||revealed)return;e.preventDefault();const p=getPos(e);ctx.globalCompositeOperation="destination-out";ctx.beginPath();ctx.arc(p.x,p.y,23,0,Math.PI*2);ctx.fill();checkScratchAmount()}
-function checkScratchAmount(){const img=ctx.getImageData(0,0,canvas.width,canvas.height);let clear=0;for(let i=3;i<img.data.length;i+=4)if(img.data[i]<80)clear++;if(clear/(img.data.length/4)>.45){revealed=true;ctx.clearRect(0,0,canvas.width,canvas.height);localStorage.setItem(playKey,"yes");setTimeout(showResult,2500)}}
-function unlockGame(){const entered=document.getElementById("codeInput").value.trim().toUpperCase();if(entered!==DAILY_CODE){statusBox.textContent="Wrong code. Check the Elite Club daily post.";return}if(localStorage.getItem(playKey)){statusBox.textContent="You’ve already used today’s VIP scratch card on this device.";gameArea.classList.add("locked");return}revealed=false;statusBox.textContent="Unlocked. Scratch your VIP card.";gameArea.classList.remove("locked");renderSymbols();setTimeout(sizeCanvas,50)}
+
+function renderSymbols(){
+  generatedSymbols=makeResult();
+  symbolsBox.innerHTML="";
+  generatedSymbols.forEach(sym=>{
+    const d=document.createElement("div");
+    d.className="symbol";
+    d.textContent=sym;
+    symbolsBox.appendChild(d);
+  });
+}
+
+function sizeCanvas(){
+  const r=document.getElementById("scratchCard").getBoundingClientRect();
+  canvas.width=r.width-28;
+  canvas.height=r.height-28;
+  drawCover();
+}
+
+function drawCover(){
+  ctx.globalCompositeOperation="source-over";
+  const g=ctx.createLinearGradient(0,0,canvas.width,canvas.height);
+  g.addColorStop(0,"#f8f8f8");
+  g.addColorStop(.25,"#bdbdbd");
+  g.addColorStop(.5,"#eeeeee");
+  g.addColorStop(.75,"#969696");
+  g.addColorStop(1,"#e8e8e8");
+  ctx.fillStyle=g;
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle="rgba(30,30,30,.45)";
+  ctx.font="900 23px Arial";
+  ctx.textAlign="center";
+  ctx.fillText("SCRATCH",canvas.width/2,canvas.height/2-9);
+  ctx.font="800 13px Arial";
+  ctx.fillText("MATCH 3 TO WIN",canvas.width/2,canvas.height/2+18);
+}
+
+function getPos(e){
+  const r=canvas.getBoundingClientRect(),t=e.touches?e.touches[0]:e;
+  return{x:(t.clientX-r.left)*(canvas.width/r.width),y:(t.clientY-r.top)*(canvas.height/r.height)}
+}
+
+function scratch(e){
+  if(gameArea.classList.contains("locked")||revealed)return;
+  e.preventDefault();
+  const p=getPos(e);
+  ctx.globalCompositeOperation="destination-out";
+  ctx.beginPath();
+  ctx.arc(p.x,p.y,23,0,Math.PI*2);
+  ctx.fill();
+  checkScratchAmount();
+}
+
+function checkScratchAmount(){
+  const img=ctx.getImageData(0,0,canvas.width,canvas.height);
+  let clear=0;
+  for(let i=3;i<img.data.length;i+=4)if(img.data[i]<80)clear++;
+  if(clear/(img.data.length/4)>.45){
+    revealed=true;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    localStorage.setItem(playKey,"yes");
+    setTimeout(showResult,2500);
+  }
+}
+
+function unlockGame(){
+  const entered=document.getElementById("codeInput").value.trim().toUpperCase();
+  if(entered!==DAILY_CODE){
+    statusBox.textContent="Wrong code. Check the Elite Club daily post.";
+    return;
+  }
+  if(localStorage.getItem(playKey)){
+    statusBox.textContent="You’ve already used today’s VIP scratch card on this device.";
+    gameArea.classList.add("locked");
+    return;
+  }
+  revealed=false;
+  statusBox.textContent="Unlocked. Scratch your VIP card.";
+  gameArea.classList.remove("locked");
+  renderSymbols();
+  setTimeout(sizeCanvas,50);
+}
+
 function copyPrizeCode(){
   const code = currentPrize && currentPrize.code ? currentPrize.code : "";
   if(!code) return;
@@ -159,46 +642,52 @@ function copyPrizeCode(){
   }).catch(() => {
     alert("Copy failed. Please manually copy the code.");
   });
-}  
-function showResult(){const won = currentPrize && currentPrize.prize.toUpperCase() !== "TRY AGAIN";
+}
+
+function showResult(){
+  const won = currentPrize && currentPrize.prize.toUpperCase() !== "TRY AGAIN";
+  addPlayStats(won);
 
   if(won){
-  modalTitle.textContent = "Winner!";
-  resultText.textContent = currentPrize.prize;
+    modalTitle.textContent = "Winner!";
+    resultText.textContent = currentPrize.prize;
 
-  const hasCode = currentPrize.code && currentPrize.code.trim() !== "";
+    const hasCode = currentPrize.code && currentPrize.code.trim() !== "";
 
-  resultSmall.innerHTML = `
-    ${hasCode ? `
-      <div style="margin:12px 0;padding:14px;border-radius:16px;background:rgba(255,215,106,.12);border:1px solid rgba(255,215,106,.35);">
-        <div style="font-size:12px;color:rgba(255,255,255,.72);margin-bottom:6px;">Your discount code:</div>
-        <div style="font-size:24px;font-weight:1000;color:#ffd76a;letter-spacing:1px;">${currentPrize.code}</div>
-        <button id="copyCodeBtn" onclick="copyPrizeCode()" style="margin-top:10px;">Copy Code</button>
-      </div>
-      Enter your details below so we can validate your win 💜<br><br>
-    ` : `
-      Enter your details below and we’ll add your site credit shortly 💜<br><br>
-    `}
-    ${currentPrize.minSpend && currentPrize.minSpend != "0" ? `Minimum spend £${currentPrize.minSpend}<br>` : ""}
-    ${currentPrize.expiry && currentPrize.expiry !== "none" ? `Valid until ${currentPrize.expiry}<br><br>` : ""}
-    <input id="claimName" placeholder="Your name" style="width:100%;padding:12px;margin-bottom:10px;border-radius:12px;border:none;">
-    <input id="claimEmail" type="email" placeholder="Your email" style="width:100%;padding:12px;margin-bottom:10px;border-radius:12px;border:none;">
-    <button id="claimBtn" onclick="submitClaim()">Claim Prize</button>
-  `;
+    resultSmall.innerHTML = `
+      ${hasCode ? `
+        <div style="margin:12px 0;padding:14px;border-radius:16px;background:rgba(255,215,106,.12);border:1px solid rgba(255,215,106,.35);">
+          <div style="font-size:12px;color:rgba(255,255,255,.72);margin-bottom:6px;">Your discount code:</div>
+          <div style="font-size:24px;font-weight:1000;color:#ffd76a;letter-spacing:1px;">${currentPrize.code}</div>
+          <button id="copyCodeBtn" onclick="copyPrizeCode()" style="margin-top:10px;">Copy Code</button>
+        </div>
+        Enter your details below so we can validate your win 💜<br><br>
+      ` : `
+        Enter your details below and we’ll add your site credit shortly 💜<br><br>
+      `}
+      ${currentPrize.minSpend && currentPrize.minSpend != "0" ? `Minimum spend £${currentPrize.minSpend}<br>` : ""}
+      ${currentPrize.expiry && currentPrize.expiry !== "none" ? `Valid until ${currentPrize.expiry}<br><br>` : ""}
+      <input id="claimName" placeholder="Your name" style="width:100%;padding:12px;margin-bottom:10px;border-radius:12px;border:none;">
+      <input id="claimEmail" type="email" placeholder="Your email" style="width:100%;padding:12px;margin-bottom:10px;border-radius:12px;border:none;">
+      <button id="claimBtn" onclick="submitClaim()">Claim Prize</button>
+    `;
   } else {
     modalTitle.textContent = "Unlucky!";
     resultText.textContent = "Try Again Tomorrow";
     resultSmall.textContent = "No luck this time. Come back tomorrow for another free play.";
   }
-if(won){
-  document.getElementById("doneBtn").style.display = "none";
-} else {
-  document.getElementById("doneBtn").style.display = "inline-block";
-      }
+
+  if(won){
+    document.getElementById("doneBtn").style.display = "none";
+  } else {
+    document.getElementById("doneBtn").style.display = "inline-block";
+  }
+
   modal.classList.add("show");
   gameArea.classList.add("locked");
   statusBox.textContent = "You’ve used today’s VIP scratch card on this device.";
 }
+
 function submitClaim(){
   const name = document.getElementById("claimName").value.trim();
   const email = document.getElementById("claimEmail").value.trim();
@@ -207,45 +696,55 @@ function submitClaim(){
     alert("Please enter your name and email.");
     return;
   }
+
   const claimBtn = document.getElementById("claimBtn");
   claimBtn.disabled = true;
   claimBtn.textContent = "Sending...";
-fetch("https://script.google.com/macros/s/AKfycbwqv0mOcwHVa2AaGzvwMLjw-nqV4LonCg3-MXpDcgcMbhmw2ORo4JmO8JiCxXZkBScC/exec", {
-  method: "POST",
-  headers: {
-    "Content-Type": "text/plain;charset=utf-8"
-  },
-  body: JSON.stringify({
-    name: name,
-    email: email,
-    prize: currentPrize.prize,
-    dailyCode: DAILY_CODE,
-    minSpend: currentPrize.minSpend || "",
-    expiry: currentPrize.expiry || "",
-    code: currentPrize.code || ""
-  })
+
+  fetch("https://script.google.com/macros/s/AKfycbwqv0mOcwHVa2AaGzvwMLjw-nqV4LonCg3-MXpDcgcMbhmw2ORo4JmO8JiCxXZkBScC/exec", {
+    method: "POST",
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8"
+    },
+    body: JSON.stringify({
+      name: name,
+      email: email,
+      prize: currentPrize.prize,
+      dailyCode: DAILY_CODE,
+      minSpend: currentPrize.minSpend || "",
+      expiry: currentPrize.expiry || "",
+      code: currentPrize.code || ""
+    })
   }).then(response => {
-  if (!response.ok) throw new Error("Failed");
-  modalTitle.textContent = "Claim Sent!";
-  resultText.textContent = "";
-  resultSmall.textContent = currentPrize.code
-  ? "Your win has been logged successfully 💜 Your discount code is ready to use."
-  : "Your win has been logged successfully 💜 Site credit claims will be checked shortly.";
-  document.getElementById("doneBtn").style.display = "inline-block";
-document.getElementById("doneBtn").textContent = "Done";
-}).catch(() => {
-  claimBtn.disabled = false;
-  claimBtn.textContent = "Claim Prize";
-  alert("Something went wrong sending your claim.");
-});
-} 
- 
+    if (!response.ok) throw new Error("Failed");
+    modalTitle.textContent = "Claim Sent!";
+    resultText.textContent = "";
+    resultSmall.textContent = currentPrize.code
+      ? "Your win has been logged successfully 💜 Your discount code is ready to use."
+      : "Your win has been logged successfully 💜 Site credit claims will be checked shortly.";
+    document.getElementById("doneBtn").style.display = "inline-block";
+    document.getElementById("doneBtn").textContent = "Done";
+  }).catch(() => {
+    claimBtn.disabled = false;
+    claimBtn.textContent = "Claim Prize";
+    alert("Something went wrong sending your claim.");
+  });
+}
+
 function closeModal(){modal.classList.remove("show")}
-function confettiBurst(){for(let i=0;i<32;i++){const p=document.createElement("div");p.textContent=["💜","🎉","✨","⭐","💷","👑"][Math.floor(Math.random()*6)];p.style.position="fixed";p.style.left=Math.random()*100+"vw";p.style.top="-25px";p.style.fontSize=(18+Math.random()*17)+"px";p.style.zIndex="120";p.style.transition="transform 1.8s ease, opacity 1.8s ease";document.body.appendChild(p);setTimeout(()=>{p.style.transform=`translateY(${80+Math.random()*40}vh) rotate(${Math.random()*360}deg)`;p.style.opacity="0"},20);setTimeout(()=>p.remove(),1900)}}
-canvas.addEventListener("mousedown",e=>{isDrawing=true;scratch(e)});canvas.addEventListener("mousemove",e=>{if(isDrawing)scratch(e)});window.addEventListener("mouseup",()=>isDrawing=false);
-canvas.addEventListener("touchstart",e=>{isDrawing=true;scratch(e)},{passive:false});canvas.addEventListener("touchmove",e=>{if(isDrawing)scratch(e)},{passive:false});canvas.addEventListener("touchend",()=>isDrawing=false);
+
+canvas.addEventListener("mousedown",e=>{isDrawing=true;scratch(e)});
+canvas.addEventListener("mousemove",e=>{if(isDrawing)scratch(e)});
+window.addEventListener("mouseup",()=>isDrawing=false);
+canvas.addEventListener("touchstart",e=>{isDrawing=true;scratch(e)},{passive:false});
+canvas.addEventListener("touchmove",e=>{if(isDrawing)scratch(e)},{passive:false});
+canvas.addEventListener("touchend",()=>isDrawing=false);
 window.addEventListener("resize",()=>{if(!gameArea.classList.contains("locked")&&!revealed)sizeCanvas()});
-renderSymbols();sizeCanvas();loadSettings();
+
+renderSymbols();
+sizeCanvas();
+loadSettings();
+updateStats();
 </script>
 </body>
 </html>

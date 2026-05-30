@@ -341,7 +341,6 @@ canvas{
 
   <section id="gameArea" class="stage hub-card locked">
     <div class="game-title">Todays Scratch card</div>
-    <div class="game-sub">Match 3 symbols to win today's reward.</div>
     <div class="ticket">
       <div class="banner" id="banner">⭐ MATCH 3 TO WIN ⭐</div>
       <div class="card" id="scratchCard">
@@ -458,7 +457,7 @@ async function loadSettings(){
   playKey = `marvalous_daily_scratch_played_${DAILY_CODE}`;
 
   statusBox.textContent = localStorage.getItem(playKey)
-    ? "You’ve already used today’s VIP scratch card on this device."
+    ? "Come back tomorrow for another scratch card."
     : "Today’s settings loaded.";
 
  } catch(e){

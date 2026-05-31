@@ -629,7 +629,7 @@ return;
 
 data.activity
 .slice(0,12)
-.forEach(entry=>{
+.forEach((entry,index)=>{
 
 let div=document.createElement("div");
 
@@ -642,6 +642,10 @@ div.innerHTML=`
 </div>
 <div>${entry.reason}</div>
 <div class="log-time">${entry.time}</div>
+<div class="row">
+<button class="grey" onclick="editActivity(${index})">Edit</button>
+<button class="red" onclick="deleteActivity(${index})">Remove</button>
+</div>
 `;
 
 log.appendChild(div);
@@ -649,7 +653,81 @@ log.appendChild(div);
 });
 
 }
+function deleteActivity(index){
 
+let entry=data.activity[index];
+
+if(!entry){
+return;
+}
+
+if(!confirm("Remove this entry?")){
+return;
+}
+
+let player=data.players.find(
+x=>x.name===entry.name
+);
+
+if(player){
+player.points-=entry.points;
+
+if(player.points<0){
+player.points=0;
+}
+}
+
+data.activity.splice(index,1);
+
+save();
+render();
+
+}
+
+function editActivity(index){
+
+let entry=data.activity[index];
+
+if(!entry){
+return;
+}
+
+let newPoints=prompt(
+"Edit points",
+entry.points
+);
+
+if(newPoints===null){
+return;
+}
+
+newPoints=parseInt(newPoints);
+
+if(isNaN(newPoints)){
+return;
+}
+
+let player=data.players.find(
+x=>x.name===entry.name
+);
+
+if(player){
+
+player.points-=entry.points;
+player.points+=newPoints;
+
+if(player.points<0){
+player.points=0;
+}
+
+}
+
+entry.points=newPoints;
+
+save();
+render();
+
+}
 function render(){
 
 populatePlayers();

@@ -159,7 +159,7 @@ td{
       <br>
 
       <button class="green" onclick="openAddPlayer()">Add New Player</button>
-
+      <button onclick="copyWeeklyReport()">Copy Weekly Report</button>
       <button class="red" onclick="resetWeek()">Reset Week</button>
 
     </div>
@@ -393,6 +393,33 @@ function resetWeek(){
   renderTable();
 }
 
+function copyWeeklyReport(){
+
+  let data=getData();
+
+  let report="WEEKLY LEAGUE POINTS\n\n";
+
+  data.players
+    .map(player=>({
+      ...player,
+      total:player.fb+player.scratch
+    }))
+    .sort((a,b)=>b.total-a.total)
+    .forEach(player=>{
+
+      report += player.name + "\n";
+      report += "Facebook Points: " + player.fb + "\n";
+      report += "App/Scratch Points: " + player.scratch + "\n";
+      report += "Total: " + player.total + "\n\n";
+
+    });
+
+  navigator.clipboard.writeText(report).then(()=>{
+    alert("Weekly report copied");
+  });
+
+}
+  
 </script>
 </body>
 </html>

@@ -333,6 +333,17 @@ h1{
       <div class="arrow">›</div>
     </a>
 
+  <a class="admin-card" href="#" onclick="openCouponGenerator();return false;">
+  <div class="left">
+    <div class="icon">🏷️</div>
+    <div class="text">
+      <h2>Daily Coupon Generator</h2>
+      <p>Generate today's 20%, 25%, 30%, 40% and 50% discount codes.</p>
+    </div>
+  </div>
+  <div class="arrow">›</div>
+  </a>  
+
 <a class="admin-card" href="https://docs.google.com/spreadsheets/d/1OTuCKL5JvU6gqin9MzX1oPq97La4D44qxiLkdUllC-Q/edit?usp=drivesdk" target="_blank" rel="noopener">
   <div class="left">
     <div class="icon">🏆</div>
@@ -449,7 +460,85 @@ function copyScratchCode(){
   });
 }
 generateScratchCode();
+
+const couponWords = [
+"MARV","VAULT","SPIN","BINGO","CASH","WINNER","MYSTERY","ELITE",
+"LUCKY","PRIZE","GOLD","SILVER","BONUS","JACKPOT","DRAW","TICKET",
+"INSTANT","SECRET","TREASURE","UNLOCK","QUEST","RACE","MEGA","SUPER",
+"POWER","LEGEND","VIP","FORTUNE","SPARK","THUNDER","DIAMOND","CRYSTAL",
+"ROCKET","STORM","BLAST","COMET","GALAXY","NOVA","TORNADO","PHANTOM",
+"DRAGON","TIGER","LION","WIZARD","MAGIC","CROWN","KING","QUEEN",
+"CHAMPION","VICTORY","HERO","BOOST","MONEY","BANK","SAFE","TOKEN",
+"RICHES","REWARD","MILLION","SPEED","DASH","LIGHTNING",
+"THRONE","EMPIRE","BOUNTY","CHEST","RUBY","EMERALD",
+"SAPPHIRE","PLATINUM","TITAN","MONSTER","BEAST","WILD","RUSH",
+"LUCK","GLOW","SHINE","FUSION","VORTEX","SHADOW","FIRE","ICE",
+"FROST","BLAZE","VOLT","COSMIC","NEBULA","ORBIT","ASTRO","NITRO",
+"TURBO","BOOSTER","SUPREME","ULTIMATE","PREMIUM","EXCLUSIVE",
+"REVEAL","UNLOCKED","MYSTIC","ENIGMA","PULSE","HAVEN","FORTRESS",
+"CASTLE","KINGDOM","RAIDER","HUNTER","EXPLORER","VOYAGE","QUESTOR"
+];
+
+function openCouponGenerator(){
+  document.getElementById("couponModal").classList.remove("hidden");
+}
+
+function closeCouponGenerator(){
+  document.getElementById("couponModal").classList.add("hidden");
+}
+
+function generateCoupons(){
+
+  let words = [...couponWords]
+    .sort(() => Math.random() - 0.5)
+    .slice(0,5);
+
+  let output =
+`${words[0]}20
+${words[1]}25
+${words[2]}30
+${words[3]}40
+${words[4]}50`;
+
+  document.getElementById("couponOutput").value = output;
+}
+
+function copyCoupons(){
+
+  navigator.clipboard.writeText(
+    document.getElementById("couponOutput").value
+  );
+
+  alert("Codes copied to clipboard");
+}
+  
 </script>
+
+<div id="couponModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.85);padding:20px;z-index:9999;overflow:auto;">
+
+  <div class="card" style="max-width:520px;margin:40px auto;">
+
+    <h2>🏷️ Daily Coupon Generator</h2>
+
+    <textarea id="couponOutput"
+      style="width:100%;height:220px;padding:12px;border-radius:14px;background:#0b0014;color:white;border:1px solid rgba(190,130,255,.45);"></textarea>
+
+    <button onclick="generateCoupons()">
+      Generate Codes
+    </button>
+
+    <button class="green" onclick="copyCoupons()">
+      Copy All Codes
+    </button>
+
+    <button class="red" onclick="closeCouponGenerator()">
+      Close
+    </button>
+
+  </div>
+
+</div>
+
   
 </body>
       </html>

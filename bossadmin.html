@@ -562,19 +562,6 @@ API_URL +
 "&t=" + Date.now()
 );
 
-if(!confirm("Archive "+selected+"?")){
-return;
-}
-
-let player=
-data.players.find(
-x=>x.name===selected
-);
-
-if(player){
-player.active=false;
-}
-
 save();
 render();
 

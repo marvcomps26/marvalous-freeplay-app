@@ -335,54 +335,49 @@ Reset Entire Week
 
 <script>
 
-const STORAGE_KEY="marv_boss_admin";
+const API_URL = "https://script.google.com/macros/s/AKfycbyNm7tljoatEHdiWuYm1zT1CaXyfuI2hay4bcc3pX21eFFZZcvmMs8Mm2K48V_Ftucc/exec";
 
 let lastAction=null;
 
-let data=JSON.parse(
-localStorage.getItem(STORAGE_KEY)
-)||{
-
-players:[
-{
-name:"Ste Cartwright",
-points:0,
-active:true
-},
-{
-name:"Amy Simkiss",
-points:0,
-active:true
-},
-{
-name:"Lauren Dell",
-points:0,
-active:true
-},
-{
-name:"Donna Jones",
-points:0,
-active:true
-},
-{
-name:"Melissa Francis",
-points:0,
-active:true
-}
-],
-
-activity:[]
+let data = {
+players: [],
+activity: []
 };
 
-save();
+loadFromSheet();
 
 function save(){
-localStorage.setItem(
-STORAGE_KEY,
-JSON.stringify(data)
-);
+/* Google Sheet handles saving now */
 }
 
+
+async function loadFromSheet(){
+
+try{
+
+const response = await fetch(
+API_URL + "?action=getPlayers"
+);
+
+const result = await response.json();
+
+if(result.success){
+
+data.players = result.players
+.filter(x => x.active);
+
+render();
+
+}
+
+}catch(error){
+
+console.error(error);
+alert("Could not load players from Google Sheet");
+
+}
+
+}  
 function populatePlayers(){
 
 let select=document.getElementById("playerSelect");

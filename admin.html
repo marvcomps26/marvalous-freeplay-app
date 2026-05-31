@@ -212,6 +212,55 @@ h1{
   box-shadow:0 0 16px rgba(123,44,255,.45);
 }
 
+.generator-card{
+  display:block;
+  text-align:center;
+}
+
+.generator-top{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  text-align:left;
+}
+
+.code-box{
+  margin:18px 0 14px;
+  padding:18px;
+  border-radius:22px;
+  background:rgba(255,215,106,.1);
+  border:1px solid rgba(255,215,106,.28);
+  color:#ffd76a;
+  font-size:30px;
+  font-weight:1000;
+  letter-spacing:2px;
+  text-align:center;
+  text-shadow:0 0 14px rgba(255,215,106,.55);
+}
+
+.generator-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.admin-action{
+  border:none;
+  border-radius:18px;
+  padding:14px 10px;
+  font-size:15px;
+  font-weight:1000;
+  color:#fff;
+  background:linear-gradient(135deg,#8c3cff,#5d1bb0);
+  box-shadow:0 0 16px rgba(123,44,255,.45);
+}
+
+.admin-action.gold{
+  color:#13000d;
+  background:linear-gradient(135deg,#fff4ad,#ffd76a,#c47a18);
+  box-shadow:0 0 16px rgba(255,215,106,.35);
+}  
+
 .back{
   display:block;
   margin:18px auto 0;
@@ -284,6 +333,23 @@ h1{
       <div class="arrow">›</div>
     </a>
 
+    <div class="admin-card generator-card">
+  <div class="generator-top">
+    <div class="icon">🎲</div>
+    <div class="text">
+      <h2>Scratch Code Generator</h2>
+      <p>Generate a daily code to paste into the settings sheet.</p>
+    </div>
+  </div>
+
+  <div id="generatedCode" class="code-box">Press Generate</div>
+
+  <div class="generator-actions">
+    <button class="admin-action" onclick="generateScratchCode()">Generate</button>
+    <button class="admin-action gold" onclick="copyScratchCode()">Copy</button>
+  </div>
+    </div>
+
     <a class="back" href="index.html">← Back To Marvalous Hub</a>
 
     <div class="footer">Marvalous Admin Dashboard</div>
@@ -291,5 +357,29 @@ h1{
   </section>
 
 </main>
+<script>
+function generateScratchCode(){
+  const prefixes = ["MARV", "VIP", "WIN", "SUN", "LUCKY", "ELITE"];
+  const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+  const number = Math.floor(10 + Math.random() * 90);
+  const code = prefix + number;
+
+  document.getElementById("generatedCode").textContent = code;
+}
+
+function copyScratchCode(){
+  const code = document.getElementById("generatedCode").textContent;
+
+  if(code === "Press Generate"){
+    alert("Generate a code first.");
+    return;
+  }
+
+  navigator.clipboard.writeText(code).then(() => {
+    alert("Code copied: " + code);
+  });
+}
+</script>
+  
 </body>
       </html>

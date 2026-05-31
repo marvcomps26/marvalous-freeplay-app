@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marvalous Admin 2</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  color:white;
+  background:radial-gradient(circle at top,#5b16b8,#08000d 55%,#000);
+  min-height:100vh;
+}
+.app{
+  width:min(520px,100%);
+  margin:0 auto;
+  padding:18px;
+}
+.card{
+  background:rgba(20,0,35,.92);
+  border:1px solid rgba(190,130,255,.35);
+  border-radius:24px;
+  padding:18px;
+  margin-bottom:14px;
+  box-shadow:0 0 25px rgba(140,50,255,.25);
+}
+h1{
+  margin:0;
+  font-size:28px;
+  text-align:center;
+  text-transform:uppercase;
+}
+h2{
+  margin:0 0 12px;
+  font-size:20px;
+}
+.sub{
+  text-align:center;
+  color:#d9b8ff;
+  font-weight:bold;
+  margin:8px 0 18px;
+}
+input,select{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:1px solid rgba(190,130,255,.45);
+  background:#0b0014;
+  color:white;
+  font-size:16px;
+  margin-bottom:10px;
+}
+button{
+  width:100%;
+  padding:15px;
+  border:0;
+  border-radius:16px;
+  color:white;
+  font-weight:900;
+  font-size:16px;
+  margin:6px 0;
+  background:linear-gradient(135deg,#8d35ff,#4b148f);
+}
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.green{background:linear-gradient(135deg,#0b8f3a,#06451d)}
+.pink{background:linear-gradient(135deg,#d02282,#5d0733)}
+.red{background:linear-gradient(135deg,#a31935,#3d0611)}
+.grey{background:#1d1427}
+table{
+  width:100%;
+  border-collapse:collapse;
+  overflow:hidden;
+  border-radius:16px;
+}
+th,td{
+  padding:10px;
+  border-bottom:1px solid rgba(255,255,255,.12);
+  text-align:left;
+}
+th{
+  color:#d9b8ff;
+  font-size:12px;
+  text-transform:uppercase;
+}
+td{
+  font-size:14px;
+}
+.num{text-align:center}
+.total{
+  font-size:18px;
+  font-weight:900;
+  color:#e4b1ff;
+}
+.hidden{display:none}
+.small{
+  font-size:12px;
+  color:#cbb8e9;
+  text-align:center;
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+  <div id="loginBox" class="card">
+    <h1>Admin 2</h1>
+    <div class="sub">Private League Tracker</div>
+
+    <input id="password" type="password" placeholder="Password">
+    <button onclick="login()">Open Tracker</button>
+
+    <p class="small">Password: marvleague2026</p>
+  </div>
+
+  <div id="tracker" class="hidden">
+    <h1>Marvalous League</h1>
+    <div class="sub">Facebook + Scratch Tracker</div>
+
+    <div class="card">
+      <h2>Add Points</h2>
+
+      <input id="search" placeholder="Search player..." oninput="fillPlayers()">
+
+      <select id="player"></select>
+
+      <div class="row">
+        <button onclick="addPoints('fb',1)">+1 Facebook</button>
+        <button class="pink" onclick="addPoints('scratch',3)">+3 Scratch</button>
+      </div>
+
+      <button class="grey" onclick="undoLast()">Undo Last</button>
+    </div>
+    <div class="card">
+      <h2>League Table</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Pos</th>
+            <th>Name</th>
+            <th class="num">FB</th>
+            <th class="num">Scratch</th>
+            <th class="num">Total</th>
+          </tr>
+        </thead>
+
+        <tbody id="tableBody"></tbody>
+
+      </table>
+
+      <br>
+
+      <button class="green" onclick="openAddPlayer()">Add New Player</button>
+
+      <button class="red" onclick="resetWeek()">Reset Week</button>
+
+    </div>
+  </div>
+</div>
+
+<div id="playerModal" class="card hidden" style="position:fixed;left:10px;right:10px;top:50%;transform:translateY(-50%);z-index:999">
+
+  <h2>Add Player</h2>
+
+  <input id="newPlayerName" placeholder="Player Name">
+
+  <button class="green" onclick="savePlayer()">Save Player</button>
+
+  <button onclick="closeAddPlayer()">Cancel</button>
+
+</div>
+
+<script>
+
+const PASSWORD="marvleague2026";
+
+const STORAGE_KEY="marvalous_admin2";
+
+let lastAction=null;
+
+function getData(){
+
+  let data=localStorage.getItem(STORAGE_KEY);
+
+  if(data) return JSON.parse(data);
+
+  return {
+    players:[
+      {name:"Ste Cartwright",fb:0,scratch:0},
+      {name:"Amy Simkiss",fb:0,scratch:0},
+      {name:"Lauren Dell",fb:0,scratch:0},
+      {name:"Donna Jones",fb:0,scratch:0},
+      {name:"Amy Boden",fb:0,scratch:0},
+      {name:"Melissa Francis",fb:0,scratch:0}
+    ]
+  };
+}
+
+function saveData(data){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+}
+
+function login(){
+
+  if(document.getElementById("password").value!==PASSWORD){
+    alert("Wrong Password");
+    return;
+  }
+
+  document.getElementById("loginBox").classList.add("hidden");
+  document.getElementById("tracker").classList.remove("hidden");
+
+  fillPlayers();
+  renderTable();
+}
+
+function fillPlayers(){
+
+  let search=document.getElementById("search").value.toLowerCase();
+
+  let data=getData();
+
+  let select=document.getElementById("player");
+
+  select.innerHTML="";
+
+  data.players
+    .filter(x=>x.name.toLowerCase().includes(search))
+    .forEach(player=>{
+
+      let option=document.createElement("option");
+
+      option.value=player.name;
+      option.textContent=player.name;
+
+      select.appendChild(option);
+
+    });
+
+  function addPoints(type,points){
+
+  let data=getData();
+
+  let selected=document.getElementById("player").value;
+
+  if(!selected){
+    alert("Choose a player first");
+    return;
+  }
+
+  let player=data.players.find(x=>x.name===selected);
+
+  player[type]+=points;
+
+  lastAction={
+    name:selected,
+    type:type,
+    points:points
+  };
+
+  saveData(data);
+  renderTable();
+}
+
+function undoLast(){
+
+  if(!lastAction){
+    alert("Nothing to undo");
+    return;
+  }
+
+  let data=getData();
+
+  let player=data.players.find(x=>x.name===lastAction.name);
+
+  if(player){
+    player[lastAction.type]-=lastAction.points;
+    if(player[lastAction.type]<0) player[lastAction.type]=0;
+  }
+
+  lastAction=null;
+
+  saveData(data);
+  renderTable();
+}
+
+function renderTable(){
+
+  let data=getData();
+
+  let body=document.getElementById("tableBody");
+
+  body.innerHTML="";
+
+  data.players
+    .map(player=>({
+      ...player,
+      total:player.fb+player.scratch
+    }))
+    .sort((a,b)=>b.total-a.total)
+    .forEach((player,index)=>{
+
+      let row=document.createElement("tr");
+
+      let pos=index+1;
+
+      if(pos===1) pos="🥇";
+      if(pos===2) pos="🥈";
+      if(pos===3) pos="🥉";
+
+      row.innerHTML=`
+        <td class="num">${pos}</td>
+        <td>${player.name}</td>
+        <td class="num">${player.fb}</td>
+        <td class="num">${player.scratch}</td>
+        <td class="num total">${player.total}</td>
+      `;
+
+      body.appendChild(row);
+
+    });
+
+}
+
+function openAddPlayer(){
+  document.getElementById("playerModal").classList.remove("hidden");
+}
+
+function closeAddPlayer(){
+  document.getElementById("playerModal").classList.add("hidden");
+}
+
+function savePlayer(){
+
+  let name=document.getElementById("newPlayerName").value.trim();
+
+  if(!name){
+    alert("Add a player name");
+    return;
+  }
+
+  let data=getData();
+
+  let exists=data.players.some(x=>x.name.toLowerCase()===name.toLowerCase());
+
+  if(exists){
+    alert("That player already exists");
+    return;
+  }
+
+  data.players.push({
+    name:name,
+    fb:0,
+    scratch:0
+  });
+
+  saveData(data);
+
+  document.getElementById("newPlayerName").value="";
+
+  closeAddPlayer();
+
+  fillPlayers();
+  renderTable();
+}
+
+function resetWeek(){
+
+  if(!confirm("Reset all weekly points to zero?")){
+    return;
+  }
+
+  let data=getData();
+
+  data.players.forEach(player=>{
+    player.fb=0;
+    player.scratch=0;
+  });
+
+  lastAction=null;
+
+  saveData(data);
+
+  renderTable();
+}
+
+</script>
+</body>
+</html>
+}

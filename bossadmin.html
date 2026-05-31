@@ -660,7 +660,7 @@ log.appendChild(div);
 });
 
 }
-function deleteActivity(index){
+async function deleteActivity(index){
 
 let entry=data.activity[index];
 
@@ -671,6 +671,13 @@ return;
 if(!confirm("Remove this entry?")){
 return;
 }
+await fetch(
+API_URL +
+"?action=removePoints" +
+"&name=" + encodeURIComponent(entry.name) +
+"&points=" + entry.points +
+"&t=" + Date.now()
+);
 
 let player=data.players.find(
 x=>x.name===entry.name

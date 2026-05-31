@@ -437,7 +437,7 @@ updateCurrentPlayer();
 );
 
 
-function addPoints(points,reason){
+async function addPoints(points,reason){
 
 let selected=
 document.getElementById("playerSelect").value;
@@ -446,6 +446,13 @@ if(!selected){
 alert("Select a player first");
 return;
 }
+await fetch(
+API_URL +
+"?action=addPoints" +
+"&name=" + encodeURIComponent(selected) +
+"&points=" + points +
+"&reason=" + encodeURIComponent(reason)
+);
 
 let player=
 data.players.find(

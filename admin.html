@@ -358,14 +358,19 @@ h1{
 
 </main>
 <script>
-function generateScratchCode(){
-  const prefixes = ["MARV", "VIP", "WIN", "SUN", "LUCKY", "ELITE"];
+ function generateScratchCode(){
+
+  const prefixes = ["MARV","VIP","WIN","LIVE","DRAW","SUN"];
+
   const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
-  const number = Math.floor(10 + Math.random() * 90);
-  const code = prefix + number;
+
+  const today = new Date();
+  const day = String(today.getDate()).padStart(2,"0");
+
+  const code = prefix + day;
 
   document.getElementById("generatedCode").textContent = code;
-}
+ } 
 
 function copyScratchCode(){
   const code = document.getElementById("generatedCode").textContent;
@@ -379,6 +384,7 @@ function copyScratchCode(){
     alert("Code copied: " + code);
   });
 }
+generateScratchCode();
 </script>
   
 </body>

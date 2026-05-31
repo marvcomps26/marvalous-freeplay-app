@@ -568,11 +568,14 @@ render();
 
 }
 
-function resetWeek(){
+async function resetWeek(){
 
 if(!confirm("Reset all points and activity log?")){
 return;
 }
+await fetch(
+API_URL + "?action=resetWeek"
+);
 
 data.players.forEach(player=>{
 player.points=0;

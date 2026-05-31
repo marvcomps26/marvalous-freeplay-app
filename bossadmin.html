@@ -574,7 +574,7 @@ if(!confirm("Reset all points and activity log?")){
 return;
 }
 await fetch(
-API_URL + "?action=resetWeek"
+API_URL + "?action=resetWeek&t=" + Date.now()
 );
 
 data.players.forEach(player=>{

@@ -294,12 +294,16 @@ h1{margin:0;font-size:36px;line-height:.92;text-transform:uppercase;text-shadow:
     <h1>Marvalous Hub</h1>
   </div>
     </div>
+
+<script>
+let tickerText = "🔥 LIVE DRAW SUNDAY 7PM • ⭐ DAILY VIP SCRATCH • 🏆 WEEKLY LEAGUE POINTS";
+    </script>
 <div class="top-ticker">
   <div class="top-ticker-track">
    
-  <span>🔥 LIVE DRAW SUNDAY 7PM • ⭐ DAILY VIP SCRATCH • 🏆 WEEKLY LEAGUE POINTS • 💷 WEEKLY CASH GAMES • 🔥 LIVE DRAW SUNDAY 7PM • ⭐ DAILY VIP SCRATCH • 🏆 WEEKLY LEAGUE POINTS • 💷 WEEKLY CASH GAMES</span>
+  <span id="ticker1"></span>
 
-<span>🔥 LIVE DRAW SUNDAY 7PM • ⭐ DAILY VIP SCRATCH • 🏆 WEEKLY LEAGUE POINTS • 💷 WEEKLY CASH GAMES • 🔥 LIVE DRAW SUNDAY 7PM • ⭐ DAILY VIP SCRATCH • 🏆 WEEKLY LEAGUE POINTS • 💷 WEEKLY CASH GAMES</span>
+<span id="ticker2"></span>
   </div>
 </div>
   <div class="sub" style="margin-bottom:30px;">
@@ -421,5 +425,26 @@ if ("serviceWorker" in navigator) {
     .catch(err => console.log("SW error", err));
 }
 </script>
+    <script>
+document.getElementById("ticker1").textContent = tickerText;
+document.getElementById("ticker2").textContent = tickerText;
+
+fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSlaiXI-x0C_wLvxmELI21rTu9uFR87MYtx9gqV_z_Z3hZ5nOCQBnb9No6i9MtZyqBD3c9wTo1tmz6x/pub?output=csv&t=" + Date.now())
+.then(r => r.text())
+.then(csv => {
+  const lines = csv.trim().split(/\r?\n/);
+
+  if(lines.length > 1){
+    const row = lines[1].split(",");
+    const sheetTicker = row[1];
+
+    if(sheetTicker){
+      document.getElementById("ticker1").textContent = sheetTicker;
+      document.getElementById("ticker2").textContent = sheetTicker;
+    }
+  }
+})
+.catch(err => console.log("Ticker load failed", err));
+    </script>
 </body>
 </html>

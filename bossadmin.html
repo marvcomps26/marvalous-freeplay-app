@@ -299,7 +299,7 @@ Add New Player
 
 <button class="red"
 onclick="removePlayer()">
-Archive Player
+Delete Player
 </button>
 
 </div>
@@ -507,7 +507,7 @@ render();
 
 }
 
-function addPlayer(){
+async function addPlayer(){
 
 let name=
 document.getElementById("newPlayerName").value.trim();
@@ -516,6 +516,12 @@ if(!name){
 alert("Enter a player name");
 return;
 }
+await fetch(
+API_URL +
+"?action=addPlayer" +
+"&name=" + encodeURIComponent(name) +
+"&t=" + Date.now()
+);
 
 let exists=
 data.players.some(
@@ -540,15 +546,21 @@ render();
 
 }
 
-function removePlayer(){
+async function removePlayer(){
 
 let selected=
 document.getElementById("removePlayer").value;
 
-if(!selected){
-alert("Select a player to archive");
+if(!confirm("Permanently delete "+selected+" from the league?")){
 return;
 }
+
+await fetch(
+API_URL +
+"?action=deletePlayer" +
+"&name=" + encodeURIComponent(selected) +
+"&t=" + Date.now()
+);
 
 if(!confirm("Archive "+selected+"?")){
 return;

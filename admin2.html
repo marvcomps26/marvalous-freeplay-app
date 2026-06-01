@@ -181,35 +181,47 @@ td{
 <script>
 
 const PASSWORD="marvleague2026";
-
-const STORAGE_KEY="marvalous_admin2";
+const STORAGE_KEY="marvalous_admin2_local";
+const API_URL="https://script.google.com/macros/s/AKfycbyNm7tljoatEHdiWuYm1zT1CaXyfuI2hay4bcc3pX21eFFZZcvmMs8Mm2K48V_Ftucc/exec";
 
 let lastAction=null;
+let data={players:[]};
 
-function getData(){
-
-  let data=localStorage.getItem(STORAGE_KEY);
-
-  if(data) return JSON.parse(data);
-
-  return {
-    players:[
-      {name:"Ste Cartwright",fb:0,scratch:0},
-      {name:"Amy Simkiss",fb:0,scratch:0},
-      {name:"Lauren Dell",fb:0,scratch:0},
-      {name:"Donna Jones",fb:0,scratch:0},
-      {name:"Amy Boden",fb:0,scratch:0},
-      {name:"Melissa Francis",fb:0,scratch:0}
-    ]
-  };
+function getLocal(){
+  return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
 }
 
-function saveData(data){
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+function saveLocal(local){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(local));
+}
+
+async function loadFromSheet(){
+  try{
+    const response=await fetch(API_URL+"?action=getPlayers&t="+Date.now());
+    const result=await response.json();
+
+    if(result.success){
+      const local=getLocal();
+
+      data.players=result.players
+      .filter(x=>x.active)
+      .map(player=>({
+        name:player.name,
+        points:Number(player.points || 0),
+        fb:local[player.name]?.fb || 0,
+        scratch:local[player.name]?.scratch || 0
+      }));
+
+      fillPlayers();
+      renderTable();
+    }
+  }catch(error){
+    console.error(error);
+    alert("Could not load players from Google Sheet");
+  }
 }
 
 function login(){
-
   if(document.getElementById("password").value!==PASSWORD){
     alert("Wrong Password");
     return;
@@ -218,38 +230,26 @@ function login(){
   document.getElementById("loginBox").classList.add("hidden");
   document.getElementById("tracker").classList.remove("hidden");
 
-  fillPlayers();
-  renderTable();
+  loadFromSheet();
 }
 
 function fillPlayers(){
-
   let search=document.getElementById("search").value.toLowerCase();
-
-  let data=getData();
-
   let select=document.getElementById("player");
 
   select.innerHTML="";
 
   data.players
-    .filter(x=>x.name.toLowerCase().includes(search))
-    .forEach(player=>{
+  .filter(x=>x.name.toLowerCase().includes(search))
+  .forEach(player=>{
+    let option=document.createElement("option");
+    option.value=player.name;
+    option.textContent=player.name;
+    select.appendChild(option);
+  });
+}
 
-      let option=document.createElement("option");
-
-      option.value=player.name;
-      option.textContent=player.name;
-
-      select.appendChild(option);
-
-    });
-   }
-
-  function addPoints(type,points){
-
-  let data=getData();
-
+async function addPoints(type,points){
   let selected=document.getElementById("player").value;
 
   if(!selected){
@@ -257,78 +257,111 @@ function fillPlayers(){
     return;
   }
 
-  let player=data.players.find(x=>x.name===selected);
+  let reason = type==="fb" ? "Facebook" : "Scratch";
 
-  player[type]+=points;
+  try{
+    await fetch(
+      API_URL+
+      "?action=addPoints"+
+      "&name="+encodeURIComponent(selected)+
+      "&points="+points+
+      "&reason="+encodeURIComponent(reason)+
+      "&t="+Date.now()
+    );
 
-  lastAction={
-    name:selected,
-    type:type,
-    points:points
-  };
+    let local=getLocal();
+    if(!local[selected]) local[selected]={fb:0,scratch:0};
+    local[selected][type]+=points;
+    saveLocal(local);
 
-  saveData(data);
-  renderTable();
+    let player=data.players.find(x=>x.name===selected);
+    if(player){
+      player[type]+=points;
+      player.points+=points;
+    }
+
+    lastAction={
+      name:selected,
+      type:type,
+      points:points,
+      reason:reason
+    };
+
+    renderTable();
+    alert(points+" point(s) added to "+selected);
+
+  }catch(error){
+    console.error(error);
+    alert("Could not update Google Sheet");
+  }
 }
 
-function undoLast(){
-
+async function undoLast(){
   if(!lastAction){
     alert("Nothing to undo");
     return;
   }
 
-  let data=getData();
+  try{
+    await fetch(
+      API_URL+
+      "?action=removePoints"+
+      "&name="+encodeURIComponent(lastAction.name)+
+      "&points="+lastAction.points+
+      "&t="+Date.now()
+    );
 
-  let player=data.players.find(x=>x.name===lastAction.name);
+    let local=getLocal();
+    if(local[lastAction.name]){
+      local[lastAction.name][lastAction.type]-=lastAction.points;
+      if(local[lastAction.name][lastAction.type]<0){
+        local[lastAction.name][lastAction.type]=0;
+      }
+      saveLocal(local);
+    }
 
-  if(player){
-    player[lastAction.type]-=lastAction.points;
-    if(player[lastAction.type]<0) player[lastAction.type]=0;
+    let player=data.players.find(x=>x.name===lastAction.name);
+    if(player){
+      player[lastAction.type]-=lastAction.points;
+      player.points-=lastAction.points;
+
+      if(player[lastAction.type]<0) player[lastAction.type]=0;
+      if(player.points<0) player.points=0;
+    }
+
+    lastAction=null;
+    renderTable();
+
+  }catch(error){
+    console.error(error);
+    alert("Could not undo on Google Sheet");
   }
-
-  lastAction=null;
-
-  saveData(data);
-  renderTable();
 }
 
 function renderTable(){
-
-  let data=getData();
-
   let body=document.getElementById("tableBody");
-
   body.innerHTML="";
 
   data.players
-    .map(player=>({
-      ...player,
-      total:player.fb+player.scratch
-    }))
-    .sort((a,b)=>b.total-a.total)
-    .forEach((player,index)=>{
+  .sort((a,b)=>b.points-a.points)
+  .forEach((player,index)=>{
+    let row=document.createElement("tr");
 
-      let row=document.createElement("tr");
+    let pos=index+1;
+    if(pos===1) pos="🥇";
+    if(pos===2) pos="🥈";
+    if(pos===3) pos="🥉";
 
-      let pos=index+1;
+    row.innerHTML=`
+      <td class="num">${pos}</td>
+      <td>${player.name}</td>
+      <td class="num">${player.fb}</td>
+      <td class="num">${player.scratch}</td>
+      <td class="num total">${player.points}</td>
+    `;
 
-      if(pos===1) pos="🥇";
-      if(pos===2) pos="🥈";
-      if(pos===3) pos="🥉";
-
-      row.innerHTML=`
-        <td class="num">${pos}</td>
-        <td>${player.name}</td>
-        <td class="num">${player.fb}</td>
-        <td class="num">${player.scratch}</td>
-        <td class="num total">${player.total}</td>
-      `;
-
-      body.appendChild(row);
-
-    });
-
+    body.appendChild(row);
+  });
 }
 
 function openAddPlayer(){
@@ -339,8 +372,7 @@ function closeAddPlayer(){
   document.getElementById("playerModal").classList.add("hidden");
 }
 
-function savePlayer(){
-
+async function savePlayer(){
   let name=document.getElementById("newPlayerName").value.trim();
 
   if(!name){
@@ -348,85 +380,67 @@ function savePlayer(){
     return;
   }
 
-  let data=getData();
+  try{
+    await fetch(
+      API_URL+
+      "?action=addPlayer"+
+      "&name="+encodeURIComponent(name)+
+      "&t="+Date.now()
+    );
 
-  let exists=data.players.some(x=>x.name.toLowerCase()===name.toLowerCase());
+    document.getElementById("newPlayerName").value="";
+    closeAddPlayer();
+    await loadFromSheet();
 
-  if(exists){
-    alert("That player already exists");
-    return;
+  }catch(error){
+    console.error(error);
+    alert("Could not add player to Google Sheet");
   }
-
-  data.players.push({
-    name:name,
-    fb:0,
-    scratch:0
-  });
-
-  saveData(data);
-
-  document.getElementById("newPlayerName").value="";
-
-  closeAddPlayer();
-
-  fillPlayers();
-  renderTable();
 }
 
-function resetWeek(){
-
-  if(!confirm("Reset all weekly points to zero?")){
+async function resetWeek(){
+  if(!confirm("This will reset the Google Sheet points to zero. Are you sure?")){
     return;
   }
 
-  let data=getData();
-
-  data.players.forEach(player=>{
-    player.fb=0;
-    player.scratch=0;
-  });
-
-  lastAction=null;
-
-  saveData(data);
-
-  renderTable();
+  try{
+    await fetch(API_URL+"?action=resetWeek&t="+Date.now());
+    localStorage.removeItem(STORAGE_KEY);
+    lastAction=null;
+    await loadFromSheet();
+  }catch(error){
+    console.error(error);
+    alert("Could not reset Google Sheet");
+  }
 }
 
 function copyWeeklyReport(){
-
-  let data=getData();
-
   let report="WEEKLY LEAGUE POINTS\n\n";
 
   data.players
-    .map(player=>({
-      ...player,
-      total:player.fb+player.scratch
-    }))
-    .sort((a,b)=>b.total-a.total)
-    .forEach(player=>{
-
-      report += player.name + "\n";
-      report += "Facebook Points: " + player.fb + "\n";
-      report += "App/Scratch Points: " + player.scratch + "\n";
-      report += "Total: " + player.total + "\n\n";
-
-    });
+  .sort((a,b)=>b.points-a.points)
+  .forEach(player=>{
+    report += player.name + "\n";
+    report += "Facebook Points: " + player.fb + "\n";
+    report += "App/Scratch Points: " + player.scratch + "\n";
+    report += "Total: " + player.points + "\n\n";
+  });
 
   navigator.clipboard.writeText(report).then(()=>{
     alert("Weekly report copied");
   });
-
 }
 
 document.getElementById("loginBox").classList.add("hidden");
 document.getElementById("tracker").classList.remove("hidden");
 
-fillPlayers();
-renderTable();
+loadFromSheet();
+
+</script>
+
 
   
+        
 </script>
 </body>
 </html>

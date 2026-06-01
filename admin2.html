@@ -163,7 +163,10 @@ td{
         <button onclick="addPoints('fb',1)">+1 Facebook</button>
         <button class="pink" onclick="addPoints('scratch',3)">+3 Scratch</button>
       </div>
-
+<div class="row">
+  <button class="red" onclick="subtractPoints('fb',1)">-1 Facebook</button>
+  <button class="red" onclick="subtractPoints('scratch',3)">-3 Scratch</button>
+</div>
       <button class="grey" onclick="undoLast()">Undo Last</button>
     </div>
     <div class="card">
@@ -339,7 +342,41 @@ async function addPoints(type,points){
     alert("Could not update Google Sheet");
   }
 }
+async function subtractPoints(type,points){
+  let selected=document.getElementById("player").value;
 
+  if(!selected){
+    alert("Choose a player first");
+    return;
+  }
+
+  try{
+    await fetch(
+      API_URL+
+      "?action=removePoints"+
+      "&name="+encodeURIComponent(selected)+
+      "&points="+points+
+      "&t="+Date.now()
+    );
+
+    let local=getLocal();
+
+    if(local[selected]){
+      local[selected][type]-=points;
+      if(local[selected][type]<0){
+        local[selected][type]=0;
+      }
+      saveLocal(local);
+    }
+
+    await loadFromSheet();
+
+  }catch(error){
+    console.error(error);
+    alert("Could not remove points from Google Sheet");
+  }
+}
+  
 async function undoLast(){
   if(!lastAction){
     alert("Nothing to undo");

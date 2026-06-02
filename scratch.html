@@ -707,9 +707,13 @@ function submitClaim(){
 
     modalTitle.textContent = "Claim Sent!";
     resultText.textContent = "";
-    resultSmall.textContent = currentPrize.code
-      ? "Your win has been logged successfully 💜 Your discount code is ready to use."
-      : "Your win has been logged successfully 💜 Site credit claims will be checked shortly.";
+    if(currentPrize.prize === "TRY AGAIN"){
+  resultSmall.textContent = "Your league points claim has been logged successfully 💜";
+} else {
+  resultSmall.textContent = currentPrize.code
+    ? "Your win has been logged successfully 💜 Your discount code is ready to use."
+    : "Your win has been logged successfully 💜 Site credit claims will be checked shortly.";
+    }
 
     document.getElementById("doneBtn").style.display = "inline-block";
     document.getElementById("doneBtn").textContent = "Done";

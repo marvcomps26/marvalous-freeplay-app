@@ -647,11 +647,17 @@ function showResult(){
       <button id="claimBtn" onclick="submitClaim()">Claim Prize</button>
     `;
   } else {
-    modalTitle.textContent = "Unlucky!";
-    resultText.textContent = "Try Again Tomorrow";
-    resultSmall.textContent = "No luck this time. Come back tomorrow for another free play.";
-  }
+    modalTitle.textContent = "Try Again!";
+    resultText.textContent = "No Prize Today";
 
+    resultSmall.innerHTML = `
+      Weekly League members can still claim +3 points for playing today 💜<br><br>
+
+      <input id="claimName" placeholder="Your name" style="width:100%;padding:12px;margin-bottom:10px;border-radius:12px;border:none;">
+      <input id="claimEmail" type="email" placeholder="Your email" style="width:100%;padding:12px;margin-bottom:10px;border-radius:12px;border:none;">
+      <button id="claimBtn" onclick="submitClaim()">Claim League Points</button>
+    `;
+  }
   if(won){
     document.getElementById("doneBtn").style.display = "none";
   } else {
@@ -684,7 +690,9 @@ function submitClaim(){
     body: JSON.stringify({
       name: name,
       email: email,
-      prize: currentPrize.prize,
+      prize: currentPrize.prize === "TRY AGAIN"
+  ? "League Points Claim (+3)"
+  : currentPrize.prize,
       dailyCode: DAILY_CODE,
       minSpend: currentPrize.minSpend || "",
       expiry: currentPrize.expiry || "",

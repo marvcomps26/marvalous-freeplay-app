@@ -589,7 +589,7 @@ function unlockGame(){
   const entered=document.getElementById("codeInput").value.trim().toUpperCase();
 
   if(entered!==DAILY_CODE){
-    statusBox.textContent="Wrong code. Check the Elite Club daily post.";
+    statusBox.textContent="Wrong code. Check the Facebook daily post.";
     return;
   }
 
@@ -641,7 +641,7 @@ function showResult(){
         Enter your details below and we’ll add your site credit shortly 💜<br><br>
       `}
       ${currentPrize.minSpend && currentPrize.minSpend != "0" ? `Minimum spend £${currentPrize.minSpend}<br>` : ""}
-      ${currentPrize.expiry && currentPrize.expiry !== "none" ? `Valid until ${currentPrize.expiry}<br><br>` : ""}
+      ${currentPrize.expiry && currentPrize.expiry !== "none" ? `Valid for ${currentPrize.expiry}<br><br>` : ""}
       <input id="claimName" placeholder="Your name" style="width:100%;padding:12px;margin-bottom:10px;border-radius:12px;border:none;">
       <input id="claimEmail" type="email" placeholder="Your email" style="width:100%;padding:12px;margin-bottom:10px;border-radius:12px;border:none;">
       <button id="claimBtn" onclick="submitClaim()">Claim Prize</button>

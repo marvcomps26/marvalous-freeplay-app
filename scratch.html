@@ -651,12 +651,16 @@ function showResult(){
     resultText.textContent = "No Prize Today";
 
     resultSmall.innerHTML = `
-      Weekly League members can still claim +3 points for playing today 💜<br><br>
+  No prize today 😢<br><br>
 
-      <input id="claimName" placeholder="Your name" style="width:100%;padding:12px;margin-bottom:10px;border-radius:12px;border:none;">
-      <input id="claimEmail" type="email" placeholder="Your email" style="width:100%;padding:12px;margin-bottom:10px;border-radius:12px;border:none;">
-      <button id="claimBtn" onclick="submitClaim()">Claim League Points</button>
-    `;
+  💜 If you're taking part in the Marvalous Weekly League, enter your details below to claim your +3 daily league points.<br><br>
+
+  Not in the league? Simply press Done and come back tomorrow for another free scratch card.<br><br>
+
+  <input id="claimName" placeholder="Your name" style="width:100%;padding:12px;margin-bottom:10px;border-radius:12px;border:none;">
+  <input id="claimEmail" type="email" placeholder="Your email" style="width:100%;padding:12px;margin-bottom:10px;border-radius:12px;border:none;">
+  <button id="claimBtn" onclick="submitClaim()">Claim +3 League Points</button>
+`;
   }
   if(won){
     document.getElementById("doneBtn").style.display = "none";

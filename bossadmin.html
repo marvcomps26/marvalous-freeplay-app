@@ -316,6 +316,10 @@ No activity yet
 
 </div>
 
+<button class="gold" onclick="downloadWeeklyReport()">
+Download Weekly Report
+</button>
+
 </div>
 
 <div class="card">
@@ -739,6 +743,47 @@ save();
 render();
 
 }
+
+async function downloadWeeklyReport(){
+
+try{
+
+const response = await fetch(
+API_URL + "?action=getActivityLog&t=" + Date.now()
+);
+
+const result = await response.json();
+
+if(!result.success){
+alert("Could not load activity log");
+return;
+}
+
+let rows = result.activity || [];
+
+let csv = "Date,Time,Player,Action,Points,Admin\n";
+
+rows.forEach(row=>{
+csv += `"${row.date}","${row.time}","${row.player}","${row.action}","${row.points}","${row.admin}"\n`;
+});
+
+let blob = new Blob([csv], { type:"text/csv" });
+let url = URL.createObjectURL(blob);
+
+let a = document.createElement("a");
+a.href = url;
+a.download = "marvalous-weekly-activity.csv";
+a.click();
+
+URL.revokeObjectURL(url);
+
+}catch(error){
+console.error(error);
+alert("Could not download report");
+}
+
+}
+  
 function render(){
 
 populatePlayers();

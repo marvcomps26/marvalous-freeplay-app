@@ -296,7 +296,7 @@ async function addPoints(type,points){
     return;
   }
 
-  let reason = type==="fb" ? "Facebook" : "Scratch";
+  let reason = type==="fb" ? "Facebook +1" : "Scratch +3";
 
   try{
     await fetch(
@@ -305,7 +305,8 @@ async function addPoints(type,points){
       "&name="+encodeURIComponent(selected)+
       "&points="+points+
       "&reason="+encodeURIComponent(reason)+
-      "&t="+Date.now()
+"&admin="+encodeURIComponent("Admin 2")+
+"&t="+Date.now()
     );
 
     let local=getLocal();

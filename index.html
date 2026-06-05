@@ -343,6 +343,35 @@ let tickerText = "🔥 LIVE DRAW SUNDAY 7PM • ⭐ DAILY VIP SCRATCH • 🏆 W
   </div>
   <div class="app-arrow">›</div>
 </a>
+ <div style="text-align:center;margin:18px 0 22px;">
+  <button onclick="openLeagueForm()"
+    style="
+      background:linear-gradient(180deg,#ffd76a,#d8a900);
+      color:#220033;
+      border:none;
+      border-radius:16px;
+      padding:14px 28px;
+      font-size:16px;
+      font-weight:900;
+      box-shadow:0 0 18px rgba(123,44,255,.5);
+    ">
+    🏆 JOIN THE LEAGUE
+  </button>
+ </div>   
+<div id="leagueModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:999;align-items:center;justify-content:center;padding:20px;">
+  <div style="width:min(380px,100%);background:#120018;border:1px solid rgba(255,215,106,.4);border-radius:28px;padding:22px;text-align:left;">
+    <h2>Join The League</h2>
+    <p style="color:rgba(255,255,255,.75);">Enter your details and we’ll get you added.</p>
+
+    <input id="leagueName" placeholder="Full name" style="width:100%;padding:14px;margin-bottom:10px;border-radius:14px;border:none;">
+    <input id="leagueEmail" type="email" placeholder="Email address" style="width:100%;padding:14px;margin-bottom:10px;border-radius:14px;border:none;">
+
+    <button onclick="submitLeagueSignup()" style="width:100%;margin-bottom:10px;">Join League</button>
+    <button onclick="closeLeagueForm()" style="width:100%;background:#321060;color:white;">Cancel</button>
+
+    <p id="leagueStatus" style="text-align:center;color:#ffd76a;"></p>
+  </div>
+</div>
     
     <div class="install">
 
@@ -445,5 +474,45 @@ fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSlaiXI-x0C_wLvxmELI21rTu
 })
 .catch(err => console.log("Ticker load failed", err));
     </script>
+
+<script>
+function openLeagueForm(){
+  document.getElementById("leagueModal").style.display = "flex";
+}
+
+function closeLeagueForm(){
+  document.getElementById("leagueModal").style.display = "none";
+}
+
+function submitLeagueSignup(){
+  const name = document.getElementById("leagueName").value.trim();
+  const email = document.getElementById("leagueEmail").value.trim();
+  const status = document.getElementById("leagueStatus");
+
+  if(!name || !email){
+    alert("Please enter your name and email.");
+    return;
+  }
+
+  status.textContent = "Sending...";
+
+  fetch("https://script.google.com/macros/s/AKfycbwqv0mOcwHVa2AaGzvwMLjw-nqV4LonCg3-MXpDcgcMbhmw2ORo4JmO8JiCxXZkBScC/exec", {
+    method: "POST",
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8"
+    },
+    body: JSON.stringify({
+      type: "leagueSignup",
+      name: name,
+      email: email
+    })
+  }).then(() => {
+    status.textContent = "Request sent! We’ll add you shortly 💜";
+  }).catch(() => {
+    status.textContent = "Something went wrong. Please try again.";
+  });
+}
+</script>
+  
 </body>
 </html>

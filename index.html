@@ -366,8 +366,13 @@ let tickerText = "🔥 LIVE DRAW SUNDAY 7PM • ⭐ DAILY VIP SCRATCH • 🏆 W
     <input id="leagueName" placeholder="Full name" style="width:100%;padding:14px;margin-bottom:10px;border-radius:14px;border:none;">
     <input id="leagueEmail" type="email" placeholder="Email address" style="width:100%;padding:14px;margin-bottom:10px;border-radius:14px;border:none;">
 
-    <button onclick="submitLeagueSignup()" style="width:100%;margin-bottom:10px;">Join League</button>
-    <button onclick="closeLeagueForm()" style="width:100%;background:#321060;color:white;">Cancel</button>
+    <button id="leagueSubmitBtn" onclick="submitLeagueSignup()" style="width:100%;padding:15px;margin:8px 0 10px;border:0;border-radius:16px;background:linear-gradient(180deg,#ffd76a,#d8a900);color:#220033;font-weight:900;font-size:16px;">
+  Join League
+</button>
+
+<button id="leagueCloseBtn" onclick="closeLeagueForm()" style="width:100%;padding:15px;margin:0;border:0;border-radius:16px;background:#321060;color:white;font-weight:900;font-size:16px;">
+  Cancel
+</button>
 
     <p id="leagueStatus" style="text-align:center;color:#ffd76a;"></p>
   </div>
@@ -508,6 +513,8 @@ function submitLeagueSignup(){
     })
   }).then(() => {
     status.textContent = "Request sent! We’ll add you shortly 💜";
+    document.getElementById("leagueSubmitBtn").style.display = "none";
+document.getElementById("leagueCloseBtn").textContent = "Close";
   }).catch(() => {
     status.textContent = "Something went wrong. Please try again.";
   });

@@ -164,6 +164,11 @@ td{
         <button class="pink" onclick="addPoints('scratch',3)">+3 Scratch</button>
       </div>
 <div class="row">
+  <button class="green" onclick="addPoints('scratch',2,'Bonus Scratch +2')">+2 Bonus</button>
+  <button class="green" onclick="addPoints('scratch',5,'Bonus Scratch +5')">+5 Bonus</button>
+</div>
+      
+<div class="row">
   <button class="red" onclick="subtractPoints('fb',1)">-1 Facebook</button>
   <button class="red" onclick="subtractPoints('scratch',3)">-3 Scratch</button>
 </div>
@@ -288,7 +293,7 @@ function fillPlayers(){
   });
 }
 
-async function addPoints(type,points){
+async function addPoints(type,points,customReason){
   let selected=document.getElementById("player").value;
 
   if(!selected){
@@ -296,7 +301,7 @@ async function addPoints(type,points){
     return;
   }
 
-  let reason = type==="fb" ? "Facebook +1" : "Scratch +3";
+  let reason = customReason || (type==="fb" ? "Facebook +1" : "Scratch +" + points);
 
   try{
     await fetch(

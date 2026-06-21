@@ -159,19 +159,43 @@ td{
 
       <select id="player"></select>
 
-      <div class="row">
-        <button onclick="addPoints('fb',1)">+1 Facebook</button>
-        <button class="pink" onclick="addPoints('scratch',3)">+3 Scratch</button>
-      </div>
-<div class="row">
-  <button class="green" onclick="addPoints('scratch',2,'Bonus Scratch +2')">+2 Bonus</button>
-  <button class="green" onclick="addPoints('scratch',5,'Bonus Scratch +5')">+5 Bonus</button>
-</div>
-      
-<div class="row">
-  <button class="red" onclick="subtractPoints('fb',1)">-1 Facebook</button>
-  <button class="red" onclick="subtractPoints('scratch',3)">-3 Scratch</button>
-</div>
+   <div class="row">
+
+  <div>
+    <select id="fbPoints">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+    </select>
+
+    <button onclick="applyFB()">Add Facebook Points</button>
+  </div>
+
+  <div>
+    <select id="scratchPoints">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+    </select>
+
+    <button onclick="applyScratch()">Add League Points</button>
+  </div>
+
+   </div>
       <button class="grey" onclick="undoLast()">Undo Last</button>
     </div>
     <div class="card">
@@ -348,6 +372,16 @@ async function addPoints(type,points,customReason){
     alert("Could not update Google Sheet");
   }
 }
+function applyFB(){
+  const points = Number(document.getElementById("fbPoints").value);
+  addPoints("fb", points, "Facebook +" + points);
+}
+
+function applyScratch(){
+  const points = Number(document.getElementById("scratchPoints").value);
+  addPoints("scratch", points, "League +" + points);
+}
+      
 async function subtractPoints(type,points){
   let selected=document.getElementById("player").value;
 

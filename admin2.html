@@ -366,6 +366,7 @@ async function addPoints(type,points,customReason){
 
     renderTable();
     renderActivity();
+    await loadFromSheet();
 
   }catch(error){
     console.error(error);

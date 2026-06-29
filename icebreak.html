@@ -322,6 +322,10 @@ button{
   box-shadow:0 0 42px rgba(191,246,255,.9),inset 0 0 24px rgba(255,255,255,.14);
 }
 .ice.picked img{transform:scale(1.07)}
+.ice:active{
+  transform:scale(.94);
+  filter:brightness(1.2);
+}
 .ice.shatter{animation:shake .36s linear}
 @keyframes shake{
   0%,100%{transform:scale(1.07) translateX(0)}
@@ -344,6 +348,34 @@ button{
   opacity:.98;
 }
 .ice.picked .ice-glow{display:block}
+.ice-sparkles{
+  position:absolute;
+  inset:-55px;
+  display:none;
+  pointer-events:none;
+  background:url("assets/icebreak/ice-sparkles.png") center/contain no-repeat;
+  z-index:5;
+  opacity:1;
+}
+
+.ice.shatter .ice-sparkles{
+  display:block;
+  animation:sparkBurst .55s ease-out forwards;
+}
+
+@keyframes sparkBurst{
+  0%{
+    transform:scale(.4);
+    opacity:0;
+  }
+  40%{
+    opacity:1;
+  }
+  100%{
+    transform:scale(1.5);
+    opacity:0;
+  }
+}
 .locked .board{opacity:.52}
 .locked .ice{pointer-events:none}
 .hint{
@@ -708,17 +740,37 @@ function breakIce(el){
 
   playSound(tapSound);
   localStorage.setItem(playKey,"yes");
+  if (navigator.vibrate) {
+  navigator.vibrate(25);
+  }
 
-  setTimeout(() => {
-    playSound(crackSound);
-    img.src = "assets/icebreak/ice-cracked.png";
-  }, 250);
+setTimeout(() => {
+  playSound(crackSound);
+  img.src = "assets/icebreak/ice-cracked.png";
+}, 250);
 
-  setTimeout(() => {
-    playSound(smashSound);
-    el.classList.add("shatter");
-    img.src = "assets/icebreak/ice-shattered.png";
-  }, 750);
+setTimeout(() => {
+  playSound(smashSound);
+
+  if (navigator.vibrate) {
+    navigator.vibrate([40, 25, 60]);
+  }
+
+  el.classList.add("shatter");
+  img.src = "assets/icebreak/ice-shattered.png";
+}, 750);
+
+setTimeout(() => {
+  playSound(smashSound);
+
+  if (navigator.vibrate) {
+    navigator.vibrate([40, 25, 60]);
+  }
+
+  el.classList.add("shatter");
+  img.src = "assets/icebreak/ice-shattered.png";
+}, 750);  
+  
 
   setTimeout(showResult, 1450);
 }

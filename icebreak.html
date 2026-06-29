@@ -346,6 +346,23 @@ button{
 .board.shake{
   animation:screenShake .25s;
 }
+.board.flash{
+  animation:flashBlue .35s;
+}
+
+@keyframes flashBlue{
+  0%{
+    box-shadow:0 0 24px rgba(121,232,255,.20);
+  }
+  50%{
+    box-shadow:
+      0 0 80px rgba(121,232,255,.95),
+      inset 0 0 45px rgba(191,246,255,.45);
+  }
+  100%{
+    box-shadow:0 0 24px rgba(121,232,255,.20);
+  }
+}
 .ice.disabled{
   opacity:.24;
   pointer-events:none;
@@ -505,6 +522,25 @@ button{
   font-size:13px;
   line-height:1.4;
 }
+@keyframes blueFlash{
+  0%{opacity:0;}
+  20%{opacity:.8;}
+  100%{opacity:0;}
+}
+
+.screen-flash{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:radial-gradient(circle,rgba(121,232,255,.75),rgba(121,232,255,.2),transparent 70%);
+  opacity:0;
+  z-index:9999;
+}
+
+.screen-flash.active{
+  animation:blueFlash .35s ease-out;
+}
+  
 </style>
 </head>
 

@@ -852,6 +852,11 @@ function closeModal(){
 
 resetIce();
 loadSettings();
+
+gameArea.classList.remove("locked");
+statusBox.textContent = "🧪 TEST MODE";
+renderBlocks();
+
 updateStats();
 </script>
 </body>

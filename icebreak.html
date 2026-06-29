@@ -536,7 +536,7 @@ button{
 <audio id="smashSound" preload="auto">
   <source src="assets/icebreak/ice-smash.mp3" type="audio/mpeg">
 </audio>
-  
+
 <script>
 const SETTINGS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSlaiXI-x0C_wLvxmELI21rTu9uFR87MYtx9gqV_z_Z3hZ5nOCQBnb9No6i9MtZyqBD3c9wTo1tmz6x/pub?output=csv";
 
@@ -548,6 +548,16 @@ const modal = document.getElementById("modal");
 const modalTitle = document.getElementById("modalTitle");
 const resultText = document.getElementById("resultText");
 const resultSmall = document.getElementById("resultSmall");
+
+const tapSound = document.getElementById("tapSound");
+const crackSound = document.getElementById("crackSound");
+const smashSound = document.getElementById("smashSound");
+
+function playSound(sound){
+  if(!sound) return;
+  sound.currentTime = 0;
+  sound.play().catch(() => {});
+}
 
 let playKey = "";
 let revealed = false;
@@ -667,13 +677,16 @@ function breakIce(el){
   const img = el.querySelector("img");
   el.classList.add("picked");
 
+  playSound(tapSound);
   localStorage.setItem(playKey,"yes");
 
   setTimeout(() => {
+    playSound(crackSound);
     img.src = "assets/icebreak/ice-cracked.png";
   }, 250);
 
   setTimeout(() => {
+    playSound(smashSound);
     el.classList.add("shatter");
     img.src = "assets/icebreak/ice-shattered.png";
   }, 750);
@@ -842,4 +855,4 @@ loadSettings();
 updateStats();
 </script>
 </body>
-  </html>
+</html>

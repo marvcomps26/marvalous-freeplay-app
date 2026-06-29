@@ -406,6 +406,7 @@ button{
 }
 .modal.show{display:flex}
 .box{
+  position:relative;
   width:min(380px,100%);
   text-align:center;
   border-radius:32px;
@@ -414,6 +415,20 @@ button{
   border:1px solid rgba(191,243,255,.48);
   box-shadow:0 0 50px rgba(101,207,255,.22),0 0 34px rgba(139,44,255,.32);
 }
+.closeModal{
+    position:absolute;
+    top:14px;
+    right:14px;
+    width:40px;
+    height:40px;
+    border:none;
+    border-radius:50%;
+    background:rgba(255,255,255,.12);
+    color:#fff;
+    font-size:24px;
+    font-weight:bold;
+    cursor:pointer;
+  }
 .box h2{
   margin:0 0 8px;
   font-size:32px;
@@ -518,6 +533,7 @@ button{
 
 <div class="modal" id="modal">
   <div class="box">
+    <button class="closeModal" onclick="closeModal()">✕</button>
     <h2 id="modalTitle">Result</h2>
     <div class="result" id="resultText"></div>
     <p class="small" id="resultSmall"></p>

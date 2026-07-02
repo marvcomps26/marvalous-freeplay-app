@@ -357,7 +357,7 @@ let tickerText = "🔥 LIVE DRAWS • ❄️ MARV'S ICE BREAK • 🏆 WEEKLY LE
   <p style="margin:0;">Your home for free play, competitions and exclusive rewards.</p>
   </div>  
 
-  <div class="notify-card">
+  <div id="notificationCard" class="notify-card">
   <div class="notify-icon">🔔</div>
   <h3>Turn On Marvalous Alerts</h3>
   <p>Get live draw reminders, bonus codes, winner updates & last chance alerts.</p>
@@ -586,6 +586,7 @@ async function turnOnNotifications(){
   OneSignalDeferred.push(async function(OneSignal) {
     try {
       await OneSignal.Notifications.requestPermission();
+      updateNotificationCard();
 
       if (OneSignal.Notifications.permission) {
         alert("You're in! Marvalous alerts are switched on 🔔");
@@ -597,7 +598,35 @@ async function turnOnNotifications(){
     }
   });
 }
+
+function updateNotificationCard(){
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+
+  OneSignalDeferred.push(function(OneSignal) {
+    const card = document.getElementById("notificationCard");
+    if (!card) return;
+
+    if (OneSignal.Notifications.permission) {
+      card.style.display = "none";
+    } else {
+      card.style.display = "block";
+    }
+  });
+}
+
+window.OneSignalDeferred = window.OneSignalDeferred || [];
+OneSignalDeferred.push(function(OneSignal) {
+  updateNotificationCard();
+
+  OneSignal.Notifications.addEventListener("permissionChange", function() {
+    updateNotificationCard();
+  });
+});
 </script>
+  
+</body>
+  </html>
+
   
 </body>
 </html>

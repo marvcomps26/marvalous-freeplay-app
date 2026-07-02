@@ -280,6 +280,33 @@ h1{margin:0;font-size:36px;line-height:.92;text-transform:uppercase;text-shadow:
     transform:translateX(-50%);
   }
 }  
+
+.notify-card{
+  margin:18px 0;
+  padding:20px 16px;
+  border-radius:28px;
+  text-align:center;
+  background:rgba(25,5,45,.78);
+  border:1px solid rgba(255,215,106,.55);
+  box-shadow:0 0 22px rgba(123,44,255,.45);
+}
+.notify-icon{font-size:38px}
+.notify-card h3{margin:8px 0;color:#ffd76a;font-size:22px}
+.notify-card p{margin:0 0 14px;color:rgba(255,255,255,.78);font-size:14px}
+.notify-card button{
+  border:none;
+  border-radius:999px;
+  padding:14px 24px;
+  background:linear-gradient(180deg,#ffd76a,#d8a900);
+  color:#220033;
+  font-size:16px;
+  font-weight:900;
+}
+.notify-card small{
+  display:block;
+  margin-top:10px;
+  color:rgba(255,255,255,.6);
+}
 </style>
 
 </head>
@@ -309,7 +336,15 @@ let tickerText = "🔥 LIVE DRAWS • ❄️ MARV'S ICE BREAK • 🏆 WEEKLY LE
   <div class="sub" style="margin-bottom:30px;">
   <h2 style="margin:0 0 8px;font-size:28px;">Welcome back! 👋</h2>
   <p style="margin:0;">Your home for free play, competitions and exclusive rewards.</p>
-  </div>    
+  </div>  
+
+  <div class="notify-card">
+  <div class="notify-icon">🔔</div>
+  <h3>Turn On Marvalous Alerts</h3>
+  <p>Get live draw reminders, bonus codes, winner updates & last chance alerts.</p>
+  <button onclick="turnOnNotifications()">Turn On Alerts</button>
+  <small>No spam. Just the good Marvalous stuff.</small>
+  </div>
 
     <a class="app-card" href="https://marvalouscompetitions.co.uk" onclick="gtag('event','hub_open_website');">
   <div class="app-icon">
@@ -521,6 +556,26 @@ function submitLeagueSignup(){
 document.getElementById("leagueCloseBtn").textContent = "Close";
   }).catch(() => {
     status.textContent = "Something went wrong. Please try again.";
+  });
+}
+</script>
+
+<script>
+async function turnOnNotifications(){
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+
+  OneSignalDeferred.push(async function(OneSignal) {
+    try {
+      await OneSignal.Notifications.requestPermission();
+
+      if (OneSignal.Notifications.permission) {
+        alert("You're in! Marvalous alerts are switched on 🔔");
+      } else {
+        alert("Notifications weren't switched on. Please tap Allow when asked.");
+      }
+    } catch(e) {
+      alert("Alerts are still loading. Please try again in a moment.");
+    }
   });
 }
 </script>
